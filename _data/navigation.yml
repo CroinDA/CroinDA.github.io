@@ -1,7 +1,74 @@
 # main links
 main:
-  - title: "Quick-Start Guide"
-    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
+  - title: "Posts"
+    url: /categories/
+  - title: "Tag"
+    url: /tags/
+  - title: "Search"
+    url: /search/
+
+docs:
+  # - title: "안녕하세요! Welcome to PM_AI_LAB🙋"
+  #   url: /first/
+  - title: "CS Basic"
+    children:
+      - title: "컴퓨터 구조"
+        url: /computer_architecture/
+      # - title: "운영체제"
+      #   url: /os/
+      - title: "자료구조"
+        url: /data_structure/
+      # - title: "네트워크"
+      #   url: /network/
+      # - title: "데이터베이스"
+      #   url: /database/
+  - title: "NAVER AI Tech"
+    children:
+      - title: "PyTorch"
+        url: /pytorch/
+      # - title: "ML Lifecycle"
+      #   url: /ml_lifecycle/
+      # - title: "EDA & DataViz"
+      #   url: /matplotlib/
+      - title: "Basic AI Development"
+        url: /basic_ai_development/
+      - title: "ML for RecSys"
+        url: /ml_recsys/
+      # - title: "ML in Practice"
+      #   url: /ml_in_practice/
+      # - title: "ML Technique"
+      #   url: /ml_technique/
+      # - title: "ML Projects"
+      #   url: /ml_projects/
+      # - title: "RecSys Basic"
+      #   url: /recsys_basic/
+      # - title: "RecSys in Practice"
+      #   url: /recsys_in_practice/
+      # - title: "RecSys Projects"
+      #   url: /recsys_projects/
+      # - title: "Generative AI"
+      #   url: /generative_ai/
+      # - title: "Product Serving"
+      #   url: /product_serving/
+      # - title: "모델 최적화 및 경량화"
+      #   url: /model_compression/
+      # - title: "RecSys Recent Trend"
+      #   url: /recsys_recent_trend/
+  - title: "Hackathon-NOTA AI"
+    children:
+      - title: "Baseline 정복"
+        url: /hackathon_baseline/
+      - title: "오디오 데이터 및 전처리"
+        url: /hackathon_audiodata/
+      - title: "오디오 언어모델 경량화"
+        url: /hackathon_lightweight/
+  - title: "알고리즘 정복기"
+    children:
+      - title: "알고리즘 기초(Python)"
+        url: /python_algorithm_basic/
+      - title: "알고리즘 스터디(Python)"
+        url: /python_algorithm_study/
+
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"

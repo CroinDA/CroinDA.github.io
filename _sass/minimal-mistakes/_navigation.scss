@@ -16,6 +16,7 @@
   animation: $intro-transition;
   -webkit-animation-delay: 0.3s;
   animation-delay: 0.3s;
+  font-size: $type-size-5;
 
   @include breakpoint($x-large) {
     max-width: $x-large;
@@ -24,7 +25,7 @@
   ol {
     padding: 0;
     list-style: none;
-    font-size: $type-size-6;
+    font-size: $type-size-5;
 
     @include breakpoint($large) {
       float: inline-end;
@@ -42,6 +43,10 @@
 
   .current {
     font-weight: bold;
+  }
+
+  a {
+    font-size: $type-size-5;
   }
 }
 
@@ -511,9 +516,9 @@
   box-shadow: $box-shadow;
 
   .nav__title {
-    color: #fff;
-    font-size: $type-size-6;
-    background: $primary-color;
+    color: #000;              // #fff; toc 목차 폰트 색상
+    font-size: $type-size-5;    // toc 목차 폰트 크기
+    background: $toc-color;     // toc 목차 배경 색상, primary-color는 __variable.scss에서 정의됨(디폴트 스킨), 스킨을 따로 지정해 주었다면 해당 스킨의 primary-color 참조
     border-start-start-radius: $border-radius;
     border-start-end-radius: $border-radius;
   }
@@ -532,7 +537,7 @@
   font-size: $type-size-6;
 
   @include breakpoint($large) {
-    font-size: $type-size-7;
+    font-size: $type-size-6;
   }
 
   a {

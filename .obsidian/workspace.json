@@ -1,0 +1,217 @@
+{
+  "main": {
+    "id": "e98abb0b770c88ea",
+    "type": "split",
+    "children": [
+      {
+        "id": "d4950b4e655d4013",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "397772022c8dd220",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "_posts/2025-03-14-python_study_week2_1018.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2025-03-14-python_study_week2_1018"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f0ee95b62ae1c765",
+    "type": "split",
+    "children": [
+      {
+        "id": "47a1db886c803b7e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "37bf1aed25081d32",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "파일 탐색기"
+            }
+          },
+          {
+            "id": "efdd3fcbd4dbc3ff",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "검색"
+            }
+          },
+          {
+            "id": "c71b3a14569a8ef0",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 345.5
+  },
+  "right": {
+    "id": "231b5e00ff94988c",
+    "type": "split",
+    "children": [
+      {
+        "id": "d8671be05a6e7097",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fa587d63d3cf24c8",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "_posts/2025-01-15-SALMONN.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "2025-01-15-SALMONN의 백링크"
+            }
+          },
+          {
+            "id": "abcdf685927ca7ef",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "_posts/2025-01-15-SALMONN.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "2025-01-15-SALMONN의 나가는 링크"
+            }
+          },
+          {
+            "id": "0f1515be93b6fad9",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "51613b1d6e60db2d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "_posts/2025-01-15-SALMONN.md"
+              },
+              "icon": "lucide-list",
+              "title": "2025-01-15-SALMONN 개요"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "obsidian-importer:Open Importer": false,
+      "templater-obsidian:Templater": false
+    }
+  },
+  "active": "397772022c8dd220",
+  "lastOpenFiles": [
+    "_posts/2025-03-11-python_study_week1_1026.md",
+    "_posts/2025-03-14-python_study_week2_1018.md",
+    "_posts/2025-03-14-cs_basic-1_2_1.md",
+    "_posts/2025-03-13-cs_basic-1_1.md",
+    "images/2025-03-14-cs_basic-1_2/image2.png",
+    "images/2025-03-14-cs_basic-1_2/스크린샷 2025-03-14 오후 6.56.40.png",
+    "images/스크린샷 2025-03-14 오후 6.56.40.png",
+    "images/2025-03-14-cs_basic-1_2/image1.png",
+    "images/2025-03-14-cs_basic-1_2/스크린샷 2025-03-14 오후 6.22.12.png",
+    "images/2025-03-14-cs_basic-1_2",
+    "images/2025-03-14-cs-ba",
+    "images/2025-03-13-cs_basic-1_1/2025-03-14-cs-ba",
+    "images/2025-03-13-cs_basic-1_1/무제",
+    "images/스크린샷 2025-03-14 오후 6.23.06.png",
+    "스크린샷 2025-03-14 오후 6.22.12.png",
+    "_templates/double_arrow.md",
+    "_templates/arrow 1.md",
+    "_templates/arrow.md",
+    "_templates/change_line 1.md",
+    "_templates/change_line.md",
+    "_templates",
+    "change_line.md.md",
+    "_posts/2025-03-14-cs_basic-1_2.md",
+    "_posts/2025-03-13-cs_basic-1_2.md",
+    "_posts/2024-08-06-python_day_2.md",
+    "images/2025-03-13-cs_basic-1_1/image1.png",
+    "_posts/2024-08-07-aitech-week1_6.md",
+    "images/2025-03-13-cs_basic-1_1",
+    "_pages/0_1_computer_architecture.md",
+    "_pages/1_9_recsys_basic.md",
+    "_pages/0_4_network.md",
+    "_pages/1_15_recsys_recent_trend.md",
+    "_pages/0_3_data_structure.md",
+    "_pages/1_6_ml_in_practice.md",
+    "_pages/2_3_hackathon_lightweight.md",
+    "_pages/1_13_product_serving.md",
+    "_pages/1_8_ml_projects.md",
+    "_pages/1_5_ml_recsys.md",
+    "_pages/0_5_database.md",
+    "_pages/1_3_matplotlib.md",
+    "images/2024-08-07-aitech-week1_6/image3.png",
+    "images/2024-08-07-aitech-week1_6/image4.png",
+    "images/2024-10-28-aitech-week11-12_3",
+    "_posts/2024-10-28-aitech-week11-12_3",
+    "_posts/Day 1 Collaborative Filtering 1 131a5ea4235480c49f20f48b0005ae42",
+    "images/2024-10-28-aitech-week11-12_2"
+  ]
+}
