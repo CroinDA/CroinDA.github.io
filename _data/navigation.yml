@@ -14,8 +14,8 @@ docs:
     children:
       - title: "컴퓨터 구조"
         url: /computer_architecture/
-      # - title: "운영체제"
-      #   url: /os/
+      - title: "운영체제"
+        url: /os/
       - title: "자료구조"
         url: /data_structure/
       # - title: "네트워크"
