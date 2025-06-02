@@ -58,8 +58,7 @@ use_math: true
 - 이를 예방하기 위해, <mark style="background: #FFF3A3A6;">loss function에 패널티항(가중치의 L1 norm, L2 norm)을 추가</mark>하여 방지해주는 것
 - 종류(회귀모델)
 	- Lasso: Loss에 <mark style="background: #FFF3A3A6;">L1 norm을 더해</mark>주는 방법
-		- 수식: 
-$$\text{Minimize} \left(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\beta_j| \right)$$
+		- 수식: $\text{Minimize} \left(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\beta_j| \right)$
 		- L1 norm: (여기서는)회귀 계수의 절댓값의 합
 		- 패널티항: 회귀 계수의 <mark style="background: #FFF3A3A6;">절대값</mark> 합계를 최소화
 		- 특징
@@ -69,8 +68,7 @@ $$\text{Minimize} \left(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^
 			- Feature Selection에 유용
 
 	- Ridge: Loss에 <mark style="background: #FFF3A3A6;">L2 norm을 더해</mark>주는 방법
-		- 수식: 
-$$\text{Minimize} \left( \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \beta_j^2 \right)$$
+		- 수식: $\text{Minimize} \left( \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \beta_j^2 \right)$
 		- L2 norm: (여기서는)회귀 계수의 제곱의 합
 		- 패널티항: 회귀 계수의 <mark style="background: #FFF3A3A6;">제곱합</mark>을 최소화
 		- 특징
