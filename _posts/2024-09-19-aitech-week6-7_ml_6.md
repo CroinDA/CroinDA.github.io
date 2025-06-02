@@ -13,7 +13,7 @@ tags:
   - 교차검증
   - Cross_validation
 author_profile: false
-mathjax: true
+use_math: true
 ---
 ## 1. 모델 과적합(Over-fitting)
 ### 과적합

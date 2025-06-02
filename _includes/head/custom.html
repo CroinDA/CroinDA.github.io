@@ -9,16 +9,9 @@
 <link rel="icon" type="image/png" sizes="192x192" href="assets/images/logo/web-app-manifest-192x192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="assets/images/logo/web-app-manifest-512x512.png">
 
-<!-- end custom head snippets -->
+{% if page.use_math %}
+  {% include mathjax-support.html %}
+{% endif %}
 
-<!-- MathJax -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$'], ['\\[','\\]']],
-    processEscapes: true
-  }
-});
-</script>
-<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- end custom head snippets -->
