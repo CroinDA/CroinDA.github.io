@@ -12,15 +12,28 @@
 <!-- end custom head snippets -->
 
 {% if page.use_math %}
-<!-- MathJax v3 -->
+<!-- MathJax v3 - Official GitHub Issue Solution -->
 <script>
-  MathJax = {
+  window.MathJax = {
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
       displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      processEscapes: true
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      ignoreHtmlClass: ".*|",
+      processHtmlClass: "arithmatex"
     }
   };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.startup.document.state(0);
+      MathJax.texReset();
+      MathJax.typesetPromise();
+    }
+  });
 </script>
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
