@@ -34,8 +34,8 @@ docs:
         url: /basic_ai_development/
       - title: "ML for RecSys"
         url: /ml_recsys/
-      # - title: "ML in Practice"
-      #   url: /ml_in_practice/
+      - title: "ML in Practice"
+        url: /ml_in_practice/
       # - title: "ML Technique"
       #   url: /ml_technique/
       # - title: "ML Projects"
