@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 모델 학습 파이프라인 이해하기(2)
+title: "[ML / 모델 학습 파이프라인] 모델 과적합 / 모델 교차 검증"
 categories:
   - ml_in_practice
 tags:
@@ -10,6 +10,8 @@ tags:
   - ML
   - 과적합
   - Overfitting
+  - 교차검증
+  - Cross_validation
 author_profile: false
 use_math: true
 ---
@@ -24,7 +26,8 @@ use_math: true
 	- 과적합
 		- 데이터의 양에 비해 모델의 크기/복잡도가 너무 작은 경우
 		- 주어진 데이터에만 과하게 훈련된 경우
-	![image1](../../images/2024-09-19-aitech-week6-7_ml_6/image1.png)
+		![image1](../../images/2024-09-19-aitech-week6-7_ml_6/image1.png)
+		
 - 과적합 여부를 판단할 수 있는 방법 → loss or metric 관찰
 	- 학습 그래프 관찰
 		- 학습을 진행할 수록
@@ -32,7 +35,7 @@ use_math: true
 			- train score는 증가하지만, validation score는 증가하지 않는 경우
 			![image2](../../images/2024-09-19-aitech-week6-7_ml_6/image2.png)
 	- train/valid score 비교
-		![image3](../../images/2024-09-19-aitech-week6-7_ml_6/image3.png)
+		![image3](../../images/2024-09-19-aitech-week6-7_ml_6/image3.png)<br><br>
 		![image4](../../images/2024-09-19-aitech-week6-7_ml_6/image4.png)
 	- Unseen 데이터(valid, test)에 대한 예측 양상 관찰
 		- 모델이 한번도 학습하지 않은 새로운 데이터를 예측할 수 있는지 관찰
@@ -55,7 +58,7 @@ use_math: true
 - 이를 예방하기 위해, <mark style="background: #FFF3A3A6;">loss function에 패널티항(가중치의 L1 norm, L2 norm)을 추가</mark>하여 방지해주는 것
 - 종류(회귀모델)
 	- Lasso: Loss에 <mark style="background: #FFF3A3A6;">L1 norm을 더해</mark>주는 방법
-		- 수식: $\text{Minimize} \left(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\beta_j| \right)$
+		- 수식: \(\text{Minimize} \left(\sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\beta_j| \right)\)
 		- L1 norm: (여기서는)회귀 계수의 절댓값의 합
 		- 패널티항: 회귀 계수의 <mark style="background: #FFF3A3A6;">절대값</mark> 합계를 최소화
 		- 특징
@@ -63,8 +66,9 @@ use_math: true
 			- <mark style="background: #FFF3A3A6;">중요한 feature를 선택</mark>할 수 있는 효과
 			- 모델에 Sparsity(0이 많은 모델) 추가
 			- Feature Selection에 유용
+
 	- Ridge: Loss에 <mark style="background: #FFF3A3A6;">L2 norm을 더해</mark>주는 방법
-		- 수식: $\text{Minimize} \left( \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \beta_j^2 \right)$
+		- 수식: \(\text{Minimize} \left( \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \beta_j^2 \right)\)
 		- L2 norm: (여기서는)회귀 계수의 제곱의 합
 		- 패널티항: 회귀 계수의 <mark style="background: #FFF3A3A6;">제곱합</mark>을 최소화
 		- 특징
