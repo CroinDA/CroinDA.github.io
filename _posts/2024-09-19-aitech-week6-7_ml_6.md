@@ -13,7 +13,7 @@ tags:
   - 교차검증
   - Cross_validation
 author_profile: false
-use_math: true
+mathjax: true
 ---
 ## 1. 모델 과적합(Over-fitting)
 ### 과적합
@@ -66,7 +66,7 @@ use_math: true
 			- <mark style="background: #FFF3A3A6;">중요한 feature를 선택</mark>할 수 있는 효과
 			- 모델에 Sparsity(0이 많은 모델) 추가
 			- Feature Selection에 유용
-
+	
 	- Ridge: Loss에 <mark style="background: #FFF3A3A6;">L2 norm을 더해</mark>주는 방법
 		- 수식: $\text{Minimize} \left( \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \beta_j^2 \right)$
 		- L2 norm: (여기서는)회귀 계수의 제곱의 합
