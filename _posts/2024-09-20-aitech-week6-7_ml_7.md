@@ -55,18 +55,19 @@ use_math: true
 			- 회귀 문제: 개별 모델 예측값의 (산술)평균(soft voting)
 				- 모델 간 상관관계가 낮을 수록, 분산 감소 효과 증대
 			- 분류 문제: 각 모델의 예측값 중 가장 높은 값(다수결 투표, hard voting)<br><br>
-	- 앙상블 기법의 Bagging에서 63.2% 고유 데이터 포함률 증명
-		1. 단일 데이터 선택 확률:
-			- 원본 데이터셋 크기를 $n$이라 할 때,
-			- 한 번의 추출에서 특정 데이터가 선택될 확률: $1/n$
-			- 선택 되지 않을 확률: $1-1/n$
-		2. n회 추출 시 확률 계산:
-			- 복원 추출을 $n$번 반복할 때,
-			- 특정 데이터가 한 번도 선택되지 않을 확률: $P = (1-1/n)^n$
-		3. 대규모 데이터셋 근사
-			- $n \rightarrow \infty$ 일 때,
-			- $\lim_{n \to \infty}(1-1/n)^n$ = $1/e \simeq 0.632$ ⇒ 63.2%
-			- 데이터가 적어도 한 번은 선택될 확률 → <mark style="background: #FFF3A3A6;">36.8%</mark><br><br>
+
+- 앙상블 기법의 Bagging에서 63.2% 고유 데이터 포함률 증명
+	1. 단일 데이터 선택 확률:
+		- 원본 데이터셋 크기를 $n$이라 할 때,
+		- 한 번의 추출에서 특정 데이터가 선택될 확률: $1/n$
+		- 선택 되지 않을 확률: $1-1/n$
+	2. n회 추출 시 확률 계산:
+		- 복원 추출을 $n$번 반복할 때,
+		- 특정 데이터가 한 번도 선택되지 않을 확률: $P = (1-1/n)^n$
+	3. 대규모 데이터셋 근사
+		- $n \rightarrow \infty$ 일 때,
+		- $\lim_{n \to \infty}(1-1/n)^n$ = $1/e \simeq 0.632$ ⇒ 63.2%
+		- 데이터가 적어도 한 번은 선택될 확률 → <mark style="background: #FFF3A3A6;">36.8%</mark><br><br>
 
 ### Boosting
 - 여러 개의 weak learner를 결합하여 하나의 strong learner를 만드는 데 사용되는 알고리즘
@@ -77,8 +78,7 @@ use_math: true
 - 예측 성능이 뛰어나, <mark style="background: #FFF3A3A6;">앙상블에 가장 많이 활용</mark>되는 기법
   (LightGBM, XGBoost, CatBoost 등)
 - Boosting 과정
-	- 일단 데이터 샘플은, bagging과 유사하게 초기 샘플 데이터 생성
-		![image7](../../images/2024-09-20-aitech-week6-7_ml_7/image7.png)
+	0. 일단 데이터 샘플은, bagging과 유사하게 초기 샘플 데이터 생성
 	1. 초기 가중치 할당
 		- 모든 데이터 포인트에 <mark style="background: #FFF3A3A6;">동일한 가중치</mark> 부여
 		- N개의 데이터에 대해, 초기 가중치 $1/N$ 부여
@@ -94,7 +94,8 @@ use_math: true
 		- 이렇게 업데이트 된 가중치를 기반으로, 강화된 weak learner
 		- 지정된 횟수만큼 반복, 각 단계마다 이전 모델의 오류 보완
 	5. 가중치 합산 예측
-		- 각 단계 모든 learner의 예측값을 가중 합산하여 최종 예측 수행<br><br>
+		- 각 단계 모든 learner의 예측값을 가중 합산하여 최종 예측 수행
+		![image7](../../images/2024-09-20-aitech-week6-7_ml_7/image7.png)<br><br>
 
 ### Voting(투표)
 - 분류 문제에서만 적용
