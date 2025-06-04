@@ -84,6 +84,7 @@ use_math: true
 - 주어진 데이터셋을 여러개로 나눠, 이를 이용해 모델 성능을 평가
 - 목적: 모델의 <mark style="background: #FFF3A3A6;">일반화 성능</mark> 평가
 - 종류: K-fold, Stratified K-fold 등<br><br>
+
 ### 교차 검증(Cross Validation)이 필요한 이유
 1. 모델 일반화 능력 평가
 	- 과적합 위험 방지 → 새로운 데이터에 대해 얼마나 잘 일반화 되어 있는지 평가
