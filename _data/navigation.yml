@@ -46,8 +46,8 @@ docs:
       #   url: /recsys_in_practice/
       # - title: "RecSys Projects"
       #   url: /recsys_projects/
-      # - title: "Generative AI"
-      #   url: /generative_ai/
+      - title: "Generative AI"
+        url: /generative_ai/
       # - title: "Product Serving"
       #   url: /product_serving/
       # - title: "모델 최적화 및 경량화"
