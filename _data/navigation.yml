@@ -36,8 +36,8 @@ docs:
         url: /ml_recsys/
       - title: "ML in Practice"
         url: /ml_in_practice/
-      # - title: "ML Technique"
-      #   url: /ml_technique/
+      - title: "ML Technique"
+        url: /ml_technique/
       # - title: "ML Projects"
       #   url: /ml_projects/
       # - title: "RecSys Basic"
