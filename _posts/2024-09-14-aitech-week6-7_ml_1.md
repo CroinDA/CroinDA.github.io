@@ -1,6 +1,6 @@
 ---
 layout: single
-title: ML 경진대회를 임하는 방법
+title: "[ML / ML 개요] ML 경진대회를 임하는 방법"
 categories:
   - ml_in_practice
 tags:
