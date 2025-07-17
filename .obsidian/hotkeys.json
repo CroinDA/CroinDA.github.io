@@ -56,21 +56,13 @@
       "key": "."
     }
   ],
-  "highlightr-plugin:Yellow": [
-    {
-      "modifiers": [
-        "Mod"
-      ],
-      "key": "="
-    }
-  ],
-  "highlightr-plugin:highlighter-plugin-menu": [
+  "window:zoom-in": [
     {
       "modifiers": [
         "Mod",
         "Shift"
       ],
-      "key": "="
+      "key": "-"
     }
   ]
 }

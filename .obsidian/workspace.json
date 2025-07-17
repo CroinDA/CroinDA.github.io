@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/2024-09-14-aitech-week6-7_ml_1.md",
+                "file": "_posts/2024-08-29-aitech-week4-5_3.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2024-09-14-aitech-week6-7_ml_1"
+              "title": "2024-08-29-aitech-week4-5_3"
             }
           }
         ]
@@ -168,7 +168,25 @@
   },
   "active": "d09eb5b96d8d473a",
   "lastOpenFiles": [
-    "_posts/2024-08-05-aitech-week1_1.md",
+    "images/2024-08-29-aitech-week4-5_3/image11.png",
+    "images/2024-08-29-aitech-week4-5_3/image10.png",
+    "images/2024-08-29-aitech-week4-5_3/image9.png",
+    "images/2024-08-29-aitech-week4-5_3/image8.png",
+    "images/2024-08-29-aitech-week4-5_3/image7.png",
+    "images/2024-08-29-aitech-week4-5_3/스크린샷 2025-07-17 오후 8.46.27.png",
+    "images/2024-08-29-aitech-week4-5_3/스크린샷 2025-07-17 오후 8.45.43.png",
+    "images/2024-08-29-aitech-week4-5_3/스크린샷 2025-07-17 오후 8.44.23.png",
+    "images/2024-08-29-aitech-week4-5_3/스크린샷 2025-07-17 오후 8.44.01.png",
+    "images/2024-08-29-aitech-week4-5_3/스크린샷 2025-07-17 오후 8.43.43.png",
+    "images/스크린샷 2025-07-17 오후 8.46.27.png",
+    "_posts/2024-09-14-aitech-week6-7_ml_2.md",
+    "images/2024-09-14-aitech-week6-7_ml_2",
+    "images/무제 폴더",
+    "_posts/2025-07-17-debug_1.md",
+    "_posts/2024-09-14-aitech-week6-7_ml_1 1.md",
+    "_pages/debug.md",
+    "_posts/2025-05-28-cs_basic-5_2.md",
+    "_posts/2024-10-29-aitech-week11-12_7_1.md",
     "_pages/1_6_ml_in_practice.md",
     "_pages/recsys.md",
     "_pages/1_5_ml_recsys.md",
@@ -186,33 +204,15 @@
     "_pages/1_2_ml_lifecycle.md",
     "_pages/0_2_os.md",
     "_pages/1_11_recsys_projects.md",
-    "images/스크린샷 2025-07-14 오후 7.07.41.png",
-    "images/스크린샷 2025-07-14 오후 7.23.20.png",
-    "images/스크린샷 2025-07-16 오후 9.17.09.png",
-    "images/스크린샷 2025-07-14 오후 7.18.29.png",
     "_posts/2024-10-29-aitech-week11-12_7_2.md",
-    "_posts/2024-10-29-aitech-week11-12_7_1.md",
     "_posts/2024-10-29-aitech-week11-12_8.md",
-    "images/2025-05-01-cs_basic-6_1/image5.png",
-    "images/2025-05-01-cs_basic-6_1/image4.png",
-    "images/2025-05-01-cs_basic-6_1/image3.png",
-    "images/2025-05-01-cs_basic-6_1/image2.png",
-    "images/2025-05-01-cs_basic-6_1/image1.png",
     "images/2025-05-01-cs_basic-6_1",
-    "images/2024-08-27-aitech-week4-5_1/image9.png",
     "images/2024-08-27-aitech-week4-5_1",
     "images/2024-10-01-aitech-week8-10_4_1",
     "images/2024-08-05-aitech-week1_1",
     "images/2025-05-03-cs_basic-6_2",
     "images/2025-03-19-cs_basic-4_3",
     "images/2024-08-28-aitech-week4-5_2",
-    "images/2024-08-06-aitech-week1_4",
-    "images/2025-03-20-cs_basic-4_5",
-    "images/2024-09-20-aitech-week6-7_ml_8",
-    "test/_recipes/oatmeal-cookies.md",
-    "test/_recipes/peanut-butter-cookies.md",
-    "test/_recipes/chocolate-chip-cookies.md",
-    "test/_posts/2017-11-28-post-exclude-search.md",
-    "test/_posts/2025-02-17-first copy.md"
+    "images/2024-08-06-aitech-week1_4"
   ]
 }
