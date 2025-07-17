@@ -2,8 +2,11 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 search: false
 ---
-
 @charset "utf-8";
-
+mark, .highlight {
+  background-color: #fff3a3;
+  padding: 0 2px;
+  border-radius: 2px;
+}
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials

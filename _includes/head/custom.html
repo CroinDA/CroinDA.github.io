@@ -9,6 +9,15 @@
 <link rel="icon" type="image/png" sizes="192x192" href="assets/images/logo/web-app-manifest-192x192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="assets/images/logo/web-app-manifest-512x512.png">
 
+<!-- Highlight ==텍스트== as <mark>텍스트</mark> -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("p, li").forEach(function(el) {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, "<mark>$1</mark>");
+  });
+});
+</script>
+
 <!-- end custom head snippets -->
 
 <!-- MathJax -->
