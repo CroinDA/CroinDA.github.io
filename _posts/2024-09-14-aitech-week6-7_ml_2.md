@@ -57,19 +57,19 @@ use_math: true
 		- 음의 상관관계 → 상호 간의 변수가 반비례 관계<br><br>
 
 ### 데이터 시각화
-- <mark style="background: #FFF3A3A6;">데이터를 쉽게 이해</mark>하기 위해 다양한 시각화 기법 활용<br><br>
+<mark style="background: #FFF3A3A6;">데이터를 쉽게 이해</mark>하기 위해 다양한 시각화 기법 활용
 1. 단변량 분석
 	- 수치형 데이터 시각화 → 히스토그램 / 박스 플롯 등
 		![image1](../../images/2024-09-14-aitech-week6-7_ml_2/image1.png)
 	- 범주형 데이터 시각화 → 막대 그래프 / 파이 차트 등
 		![image2](../../images/2024-09-14-aitech-week6-7_ml_2/image2.png)
-	
+		
 2. 이변량 분석
 	- 수치형 변수 간의 관계 → 산점도 / 상관 행렬도 등
 		![image3](../../images/2024-09-14-aitech-week6-7_ml_2/image3.png)
 	- 수치형 변수 ↔ 범주형 변수 간의 관계 → 박스 플롯 / 바이올린 플롯 등(분포 파악에 용이)
 		![image4](../../images/2024-09-14-aitech-week6-7_ml_2/image4.png)
-	
+		
 - 기타 데이터 시각화 방법은 다양 → 다양한 도구를 적절히 활용하는 방법 경험하며 익히기
 	![image5](../../images/2024-09-14-aitech-week6-7_ml_2/image5.png)
 	![image6](../../images/2024-09-14-aitech-week6-7_ml_2/image6.png)<br><br>
