@@ -68,6 +68,10 @@ docs:
         url: /python_algorithm_basic/
       - title: "알고리즘 스터디(Python)"
         url: /python_algorithm_study/
+  # - title: "도와주세요"
+  #   children:
+  #     - title: "도와주세요"
+  #       url: /help_me/
 
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
