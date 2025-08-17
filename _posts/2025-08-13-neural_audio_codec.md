@@ -9,6 +9,7 @@ tags:
   - codec
   - neural
 author_profile: false
+use_math: true
 ---
 ## 0. Neural Audio Codec 개요: vs. 전통적 오디오 코덱
 - 전통적 코덱(MP3, AAC 등)

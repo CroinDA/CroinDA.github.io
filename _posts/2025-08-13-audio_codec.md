@@ -9,6 +9,7 @@ tags:
   - codec
   - 오디오압축
 author_profile: false
+use_math: true
 ---
 ## 1. 압축이 필요한 이유
 - 원본 파형은 1초에 44,100 x 16비트 = 705,600비트 → 대략 88KB 용량의 데이터 생성

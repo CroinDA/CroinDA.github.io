@@ -12,6 +12,7 @@ tags:
   - bitdepth
   - waveform
 author_profile: false
+use_math: true
 ---
 ## 1. 소리가 디지털 신호가 되는 과정
 소리란?
