@@ -72,8 +72,8 @@ docs:
     children:
       - title: "오디오 배경지식"
         url: /audio_background/
-      # - title: "논문 리뷰"
-      #   url: /paper_review_audio/
+      - title: "논문 리뷰"
+        url: /paper_review_audio/
   # - title: "도와주세요"
   #   children:
   #     - title: "도와주세요"
