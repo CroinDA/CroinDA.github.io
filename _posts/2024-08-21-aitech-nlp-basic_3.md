@@ -2,7 +2,7 @@
 layout: single
 title: "[NLP 이론 / RNN] 순환 신경망(RNN, Recurrent Neural Network)과 Language Modeling"
 categories:
-  - ml_lifecycle
+  - nlp_basic
 tags:
   - 부스트캠프
   - AITech
