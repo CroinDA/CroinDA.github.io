@@ -307,6 +307,7 @@ category_archive:
     cv: "CV(Computer Vision)"
     recsys: "RecSys"
     hackathon: "Company Hackathon"
+    nlp_basic: "NLP Basic"
 tag_archive:
   type: liquid
   path: /tags/
@@ -369,6 +370,7 @@ breadcrumb_titles:
   # NAVER AI Tech
   "NAVER AI Tech": "NAVER AI Tech"
   pytorch: "PyTorch"
+  nlp_basic: "NLP Basic"
   ml_lifecycle: "ML Lifecycle" 
   matplotlib: "EDA & DataViz"
   basic_ai_development: "Basic AI Development"
