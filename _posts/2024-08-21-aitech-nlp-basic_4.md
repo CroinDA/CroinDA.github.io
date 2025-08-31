@@ -65,7 +65,7 @@ $f = y_3$ 라 놓으면, $\frac{df}{dh_1}$을 구하여 역전파 계산
 2. $W_{hh}$가 Eigencomposition을 통해 $VDV^{-1}$로 분해 가능하다고 가정하면
 	- $W_{hh}^{t-1}h_1= VD^{t-1}V^{-1}h_1$
 3. 행렬 $D$ → Eigenvalue의 대각 행렬 → Eigenvalue의 지수승($t-1$) 곱함
-	- $\begin{bmatrix}2&0\\0&0.3\end{bmatrix}^{t-1}\begin{bmatrix}a\\b\end{bmatrix}=\begin{bmatrix}2^{t-1}&0\\0&0.3^{t-1}\end{bmatrix}\begin{bmatrix}a\\b\end{bmatrix}$
+	- $\begin{bmatrix}2&0\\0&0.3\end{bmatrix}^{\,t-1}\begin{bmatrix}a\\b\end{bmatrix}=\begin{bmatrix}2^{\,t-1}&0\\0&0.3^{\,t-1}\end{bmatrix}\begin{bmatrix}a\\b\end{bmatrix}$
 	- $2^{t-1}$과 곱해지는 $a$는 Exploding Gradient: Eigenvalue의 절댓값이 1보다 큼
 		- 완벽하진 않지만, 해결책: threshold (gradient cliping) → Gradient가 증가하는 한계점을 잡아줌
 	- $0.3^{t-1}$과 곱해지는 $b$는 Exploding Gradient: Eigenvalue의 절댓값이 1보다 작음<br><br>
