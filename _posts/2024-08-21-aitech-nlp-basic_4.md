@@ -20,22 +20,23 @@ use_math: true
 RNN의 가장 큰 문제점은 시계열 데이터의 ==장기 의존 관계를 학습하지 못하==는 데에 있다.        
 BPTT 중에 파라미터를 업데이트하면서 ==기울기 소실(Vanishing Gradient)== 혹은 ==기울기 폭발(Exploding Gradient)==이 일어나기 때문이다.<br><br>
 
-## Exploding / Vanishing Gradient 발생 원인
+## Exploding / Vanishing Gradient
+### 발생원인
 ![image1](../../images/2024-08-21-aitech-nlp-basic_4/image1.png)          
 - 정답 레이블이 'Tom'임을 학습할 때에는 중요한 것은 RNN계층이 과거 방향으로 "의미 있는 기울기"를 전달하는 것임
 - 기울기에는 학습해야 할 의미있는 정보가 담겨 있고, 이를 과거로 전달하면서 장기 의존 관계 학습
 - 그렇기 때문에, 이 기울기가 과거로 전달되는 도중 사그라들면 장기 의존 관계를 학습할 수 없게됨
 - 하지만, RNN같은 아직 단순한 계층들에서는 기울기가 여러 번 전달되는 과정에서는 기울기가 0으로 수렴하거나 무한대로 발산하게 됨 → 기울기 폭발 / 소실 현상의 발생<br><br>
 
-## RNN 학습 예시
-### 개요
-![image2](../../images/2024-08-21-aitech-nlp-basic_4/image2.png)         
+### RNN 학습 예시
+개요               
+![image2](../../images/2024-08-21-aitech-nlp-basic_4/image2.png)              
 - $h_1 = tanh(ah_0 + bx_1 + c)$
 - $h_2 = tanh(ah_1 + bx_2 + c)$
 - $h_3 = tanh(ah_2 + bx_3 + c)$
 - $y_3 = dh_3 + e$<br><br>
 
-### Backpropagation 수행
+Backpropagation 수행
 $f = y_3$ 라 놓으면, $\frac{df}{dh_1}$을 구하여 역전파 계산
 - $\frac{df}{dh_1} = \frac{df}{dh_3} \times \frac{dh_3}{dh_2} \times \frac{dh_2}{dh_1}$<br><br>
 
@@ -53,7 +54,7 @@ $f = y_3$ 라 놓으면, $\frac{df}{dh_1}$을 구하여 역전파 계산
 	- $\vert a \vert > 1$ → $\lim_{n\to\infty} a^n = \infty$ → "Exploding Gradient"
 	- $\vert a \vert < 1$ → $\lim_{n\to\infty} a^n = 0$ → "Vanishing Gradient"<br><br>
 
-## Exploding / Vanishing Gradient in RNN
+### Exploding / Vanishing Gradient in RNN
 0. RNN: $h_t = tanh(W_{hh}h_{t-1} + W_{xh}x_t + b)$
 1. 첫 Hidden-state vector에 $W_{hh}$ 반복적으로 곱하는 것과 유사
 	- $h_t \propto W_{hh}^{t-1}\, h_1$
@@ -65,13 +66,7 @@ $f = y_3$ 라 놓으면, $\frac{df}{dh_1}$을 구하여 역전파 계산
 2. $W_{hh}$가 Eigencomposition을 통해 $VDV^{-1}$로 분해 가능하다고 가정하면
 	- $W_{hh}^{t-1}h_1= VD^{t-1}V^{-1}h_1$
 3. 행렬 $D$ → Eigenvalue의 대각 행렬 → Eigenvalue의 지수승($t-1$) 곱함
-	$$
-\begin{bmatrix}2&0\\0&0.3\end{bmatrix}^{\,t-1}
-\begin{bmatrix}a\\b\end{bmatrix}
-=
-\begin{bmatrix}2^{\,t-1}&0\\0&0.3^{\,t-1}\end{bmatrix}
-\begin{bmatrix}a\\b\end{bmatrix}
-$$
+		![image3](../../images/2024-08-21-aitech-nlp-basic_4/image3.png)
 	- $2^{t-1}$과 곱해지는 $a$는 Exploding Gradient: Eigenvalue의 절댓값이 1보다 큼
 		- 완벽하진 않지만, 해결책: threshold (gradient cliping) → Gradient가 증가하는 한계점을 잡아줌
 	- $0.3^{t-1}$과 곱해지는 $b$는 Exploding Gradient: Eigenvalue의 절댓값이 1보다 작음<br><br>
