@@ -26,6 +26,8 @@ docs:
     children:
       - title: "PyTorch"
         url: /pytorch/
+      - title: "NLP Basic"
+        url: /nlp_basic/
       # - title: "ML Lifecycle"
       #   url: /ml_lifecycle/
       # - title: "EDA & DataViz"
