@@ -44,8 +44,8 @@ docs:
       #   url: /ml_projects/
       - title: "RecSys Basic"
         url: /recsys_basic/
-      - title: "RecSys in Practice"
-        url: /recsys_in_practice/
+      # - title: "RecSys in Practice"
+      #   url: /recsys_in_practice/
       # - title: "RecSys Projects"
       #   url: /recsys_projects/
       - title: "Generative AI"
