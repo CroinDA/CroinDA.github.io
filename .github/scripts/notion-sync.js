@@ -56,6 +56,11 @@ async function processPage(page) {
     
     // 페이지 콘텐츠 가져오기
     const blocks = await getPageBlocks(page.id);
+    console.log(`  📦 총 ${blocks.length}개 블록 발견`);
+    
+    // 이미지 블록 개수 확인
+    const imageBlocks = blocks.filter(b => b.type === 'image');
+    console.log(`  🖼️ 이미지 블록: ${imageBlocks.length}개`);
     
     // 이미지 처리
     const imageMap = await processImages(blocks, date, fileName);
@@ -136,15 +141,23 @@ async function processImages(blocks, date, fileName) {
   
   for (const block of blocks) {
     if (block.type === 'image') {
-      const imageUrl = block.image.file?.url || block.image.external?.url;
+      // Notion API의 이미지 URL 추출
+      let imageUrl = null;
+      
+      if (block.image.type === 'file') {
+        imageUrl = block.image.file.url;
+      } else if (block.image.type === 'external') {
+        imageUrl = block.image.external.url;
+      }
       
       if (imageUrl) {
-        console.log(`  📸 이미지 ${imageIndex} 다운로드 중...`);
+        console.log(`  📸 이미지 ${imageIndex} 다운로드 중... (${imageUrl.substring(0, 50)}...)`);
         
         try {
           // axios로 이미지 다운로드
           const response = await axios.get(imageUrl, {
-            responseType: 'arraybuffer'
+            responseType: 'arraybuffer',
+            timeout: 30000
           });
           
           // 파일명 생성
@@ -156,7 +169,7 @@ async function processImages(blocks, date, fileName) {
           fs.writeFileSync(imagePath, response.data);
           
           // 경로 매핑
-          const relativePath = `../../images/${date}-${fileName}/${imageName}`;
+          const relativePath = `/images/${date}-${fileName}/${imageName}`;
           imageMap.set(block.id, relativePath);
           
           console.log(`  ✅ 저장: ${imagePath}`);
@@ -165,6 +178,8 @@ async function processImages(blocks, date, fileName) {
         } catch (error) {
           console.error(`  ❌ 이미지 다운로드 실패:`, error.message);
         }
+      } else {
+        console.log(`  ⚠️ 이미지 URL을 찾을 수 없습니다`);
       }
     }
   }
