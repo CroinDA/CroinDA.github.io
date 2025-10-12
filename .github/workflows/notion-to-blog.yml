@@ -26,8 +26,26 @@ jobs:
       
       - name: Install dependencies
         run: |
-          npm install @notionhq/client
-          npm install node-fetch
+          npm install @notionhq/client@2.2.15
+          npm install node-fetch@2.7.0
+      
+      - name: Check Secrets
+        run: |
+          if [ -z "${{ secrets.NOTION_TOKEN }}" ]; then
+            echo "❌ NOTION_TOKEN이 설정되지 않았습니다!"
+            echo "GitHub Settings → Secrets → Actions에서 NOTION_TOKEN을 추가해주세요."
+            exit 1
+          fi
+          if [ -z "${{ secrets.NOTION_DATABASE_ID }}" ]; then
+            echo "❌ NOTION_DATABASE_ID가 설정되지 않았습니다!"
+            echo "GitHub Settings → Secrets → Actions에서 NOTION_DATABASE_ID를 추가해주세요."
+            exit 1
+          fi
+          echo "✅ Secrets 확인 완료"
+          echo "NOTION_TOKEN: ${NOTION_TOKEN:0:10}..."
+          echo "NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}"
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       
       - name: Sync Notion to Blog
         env:
