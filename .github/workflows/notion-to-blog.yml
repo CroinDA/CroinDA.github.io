@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
       
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -68,5 +69,15 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          
+          # 원격 변경사항 가져오기
+          git pull --rebase origin master
+          
+          # 변경사항 커밋 및 푸시
           git add .
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-sync from Notion [skip ci]" && git push)
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "변경사항 없음"
+          else
+            git commit -m "Auto-sync from Notion [skip ci]"
+            git push origin master
+          fi
