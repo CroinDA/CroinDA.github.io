@@ -26,21 +26,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: master
       
-      - name: Pull latest changes
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git pull origin master --rebase
-      
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-      
-      - name: Clean npm cache
-        run: |
-          npm cache clean --force
-          rm -rf node_modules package-lock.json
       
       - name: Install dependencies
         run: |
@@ -58,6 +47,8 @@ jobs:
             exit 1
           fi
           echo "✅ Secrets 확인 완료"
+          echo "NOTION_TOKEN: ${NOTION_TOKEN:0:10}..."
+          echo "NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}"
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       
@@ -67,25 +58,29 @@ jobs:
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         run: node .github/scripts/notion-sync.js
       
-      - name: Commit and Push
+      - name: Check for changes
+        id: check_changes
         run: |
-          git add .
-          
+          git add _posts/ images/
           if git diff --staged --quiet; then
-            echo "✅ 변경사항 없음"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "✅ 변경사항 없음 - Notion에 '업로드 준비' 상태인 글이 없습니다"
           else
-            git pull origin master --rebase || true
-            git commit -m "Auto-sync from Notion [skip ci]"
-            
-            # 재시도 로직
-            for i in {1..3}; do
-              if git push origin master; then
-                echo "✅ Push 성공!"
-                break
-              else
-                echo "⚠️ Push 실패, 재시도 $i/3"
-                git pull origin master --rebase
-                sleep 2
-              fi
-            done
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✅ 변경사항 발견 - 커밋 준비"
           fi
+      
+      - name: Commit and Push
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # 원격 변경사항 가져오기
+          git pull origin master --rebase || echo "Nothing to pull"
+          
+          # 커밋 및 푸시
+          git commit -m "Auto-sync from Notion [skip ci]"
+          git push origin master
+          
+          echo "✅ Push 성공!"
