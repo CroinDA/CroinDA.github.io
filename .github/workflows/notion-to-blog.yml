@@ -58,29 +58,38 @@ jobs:
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         run: node .github/scripts/notion-sync.js
       
-      - name: Check for changes
-        id: check_changes
-        run: |
-          git add _posts/ images/
-          if git diff --staged --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "✅ 변경사항 없음 - Notion에 '업로드 준비' 상태인 글이 없습니다"
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "✅ 변경사항 발견 - 커밋 준비"
-          fi
-      
       - name: Commit and Push
-        if: steps.check_changes.outputs.has_changes == 'true'
         run: |
+          # Git 설정
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 원격 변경사항 가져오기
-          git pull origin master --rebase || echo "Nothing to pull"
+          # 변경사항만 추가 (_posts와 images만)
+          git add _posts/ images/ 2>/dev/null || true
           
-          # 커밋 및 푸시
+          # 변경사항 확인
+          if git diff --staged --quiet; then
+            echo "✅ 변경사항 없음 - Notion에 '업로드 준비' 상태인 글이 없습니다"
+            exit 0
+          fi
+          
+          echo "✅ 변경사항 발견 - 커밋 진행"
+          
+          # 모든 unstaged 변경사항 stash (node_modules 등)
+          git stash --include-untracked || true
+          
+          # 원격에서 최신 변경사항 가져오기
+          git fetch origin master
+          git rebase origin/master || {
+            echo "Rebase 실패, 재시도..."
+            git rebase --abort
+            git pull origin master --rebase
+          }
+          
+          # 커밋
           git commit -m "Auto-sync from Notion [skip ci]"
+          
+          # 푸시
           git push origin master
           
           echo "✅ Push 성공!"
