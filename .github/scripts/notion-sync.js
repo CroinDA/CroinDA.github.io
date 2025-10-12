@@ -1,12 +1,10 @@
 // Notion → GitHub Pages 완전 자동 동기화 스크립트
-// 이미지 다운로드 및 업로드 포함
+// 이미지 다운로드 및 업로드 포함 (axios 사용)
 
 const { Client } = require('@notionhq/client');
+const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-
-// node-fetch를 동적으로 import (ESM 모듈 문제 해결)
-let fetch;
 
 // Notion 클라이언트 초기화
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
@@ -14,9 +12,6 @@ const databaseId = process.env.NOTION_DATABASE_ID;
 
 // 메인 함수
 async function syncNotionToBlog() {
-  // fetch 동적 로드
-  fetch = (await import('node-fetch')).default;
-  
   console.log('🔄 Notion 동기화 시작...');
   
   try {
@@ -128,7 +123,7 @@ async function getPageBlocks(pageId) {
   return blocks;
 }
 
-// 이미지 처리 (다운로드 및 저장)
+// 이미지 처리 (다운로드 및 저장) - axios 사용
 async function processImages(blocks, date, fileName) {
   const imageMap = new Map();
   let imageIndex = 1;
@@ -147,9 +142,10 @@ async function processImages(blocks, date, fileName) {
         console.log(`  📸 이미지 ${imageIndex} 다운로드 중...`);
         
         try {
-          // 이미지 다운로드
-          const response = await fetch(imageUrl);
-          const buffer = Buffer.from(await response.arrayBuffer());
+          // axios로 이미지 다운로드
+          const response = await axios.get(imageUrl, {
+            responseType: 'arraybuffer'
+          });
           
           // 파일명 생성
           const ext = path.extname(imageUrl.split('?')[0]) || '.png';
@@ -157,7 +153,7 @@ async function processImages(blocks, date, fileName) {
           const imagePath = path.join(imageDir, imageName);
           
           // 이미지 저장
-          fs.writeFileSync(imagePath, buffer);
+          fs.writeFileSync(imagePath, response.data);
           
           // 경로 매핑
           const relativePath = `../../images/${date}-${fileName}/${imageName}`;
