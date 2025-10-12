@@ -38,7 +38,7 @@ jobs:
       
       - name: Check Secrets
         run: |
-          if [ -z "${{ secrets.NOTION_TOKEN }}" ]; then
+          if [ -z "${{ secrets.NOTION_TOKEN}}" ]; then
             echo "❌ NOTION_TOKEN이 설정되지 않았습니다!"
             exit 1
           fi
@@ -47,8 +47,6 @@ jobs:
             exit 1
           fi
           echo "✅ Secrets 확인 완료"
-          echo "NOTION_TOKEN: ${NOTION_TOKEN:0:10}..."
-          echo "NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}"
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       
@@ -64,31 +62,27 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 먼저 모든 untracked/unstaged 파일 stash
-          git add -A
-          git stash --include-untracked || echo "Nothing to stash"
+          # untracked 파일들 완전히 제거 (node_modules 등)
+          git clean -fd
           
-          # 이제 _posts와 images만 다시 추가
-          git stash pop || echo "Nothing to pop"
-          git reset
+          # _posts와 images만 추가
           git add _posts/ images/ 2>/dev/null || true
           
           # 변경사항 확인
           if git diff --staged --quiet; then
-            echo "✅ 변경사항 없음 - Notion에 '업로드 준비' 상태인 글이 없습니다"
+            echo "✅ 변경사항 없음"
             exit 0
           fi
           
           echo "✅ 변경사항 발견 - 커밋 진행"
           
-          # 원격에서 최신 변경사항 가져오기
-          git fetch origin master
-          git rebase origin/master
-          
           # 커밋
           git commit -m "Auto-sync from Notion [skip ci]"
           
-          # 푸시
-          git push origin master
+          # 푸시 (충돌 시 실패하고 다음 실행 때 재시도)
+          git push origin master || {
+            echo "⚠️ Push 실패 - 다음 실행 때 재시도됩니다"
+            exit 0
+          }
           
           echo "✅ Push 성공!"
