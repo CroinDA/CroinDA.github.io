@@ -64,7 +64,13 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 변경사항만 추가 (_posts와 images만)
+          # 먼저 모든 untracked/unstaged 파일 stash
+          git add -A
+          git stash --include-untracked || echo "Nothing to stash"
+          
+          # 이제 _posts와 images만 다시 추가
+          git stash pop || echo "Nothing to pop"
+          git reset
           git add _posts/ images/ 2>/dev/null || true
           
           # 변경사항 확인
@@ -75,16 +81,9 @@ jobs:
           
           echo "✅ 변경사항 발견 - 커밋 진행"
           
-          # 모든 unstaged 변경사항 stash (node_modules 등)
-          git stash --include-untracked || true
-          
           # 원격에서 최신 변경사항 가져오기
           git fetch origin master
-          git rebase origin/master || {
-            echo "Rebase 실패, 재시도..."
-            git rebase --abort
-            git pull origin master --rebase
-          }
+          git rebase origin/master
           
           # 커밋
           git commit -m "Auto-sync from Notion [skip ci]"
