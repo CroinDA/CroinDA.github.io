@@ -2,9 +2,11 @@
 // 이미지 다운로드 및 업로드 포함
 
 const { Client } = require('@notionhq/client');
-const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
+
+// node-fetch를 동적으로 import (ESM 모듈 문제 해결)
+let fetch;
 
 // Notion 클라이언트 초기화
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
@@ -12,6 +14,9 @@ const databaseId = process.env.NOTION_DATABASE_ID;
 
 // 메인 함수
 async function syncNotionToBlog() {
+  // fetch 동적 로드
+  fetch = (await import('node-fetch')).default;
+  
   console.log('🔄 Notion 동기화 시작...');
   
   try {
@@ -144,7 +149,7 @@ async function processImages(blocks, date, fileName) {
         try {
           // 이미지 다운로드
           const response = await fetch(imageUrl);
-          const buffer = await response.buffer();
+          const buffer = Buffer.from(await response.arrayBuffer());
           
           // 파일명 생성
           const ext = path.extname(imageUrl.split('?')[0]) || '.png';
