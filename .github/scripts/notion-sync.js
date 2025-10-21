@@ -1,6 +1,6 @@
 // Notion → GitHub Pages 완전 자동 동기화 스크립트
 // 이미지 다운로드 및 업로드 포함 (axios 사용)
-// 표(table)와 형광펜(배경색) 지원
+// 표(table), 형광펜(배경색), 줄바꿈 지원
 
 const { Client } = require('@notionhq/client');
 const axios = require('axios');
@@ -192,14 +192,21 @@ async function processImages(blocks, date, fileName) {
   return imageMap;
 }
 
-// 블록을 마크다운으로 변환
+// 블록을 마크다운으로 변환 (줄바꿈 지원 추가)
 async function blocksToMarkdown(blocks, imageMap) {
   let markdown = '';
   
   for (const block of blocks) {
     switch (block.type) {
       case 'paragraph':
-        markdown += richTextToMarkdown(block.paragraph.rich_text) + '\n\n';
+        const paragraphText = richTextToMarkdown(block.paragraph.rich_text);
+        
+        // 빈 paragraph는 줄바꿈으로 처리 (엔터 한 번 친 효과)
+        if (paragraphText.trim() === '') {
+          markdown += '<br>\n\n';
+        } else {
+          markdown += paragraphText + '\n\n';
+        }
         break;
       
       case 'heading_1':
