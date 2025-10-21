@@ -16,7 +16,7 @@ async function syncNotionToBlog() {
   console.log('🔄 Notion 동기화 시작...');
   
   try {
-    // "업로드 준비" 상태인 페이지 가져오기
+    // "업로드 준비" 상태인 페이지 가져오기 (상태 기반으로만 작동)
     const response = await notion.databases.query({
       database_id: databaseId,
       filter: {
@@ -90,6 +90,9 @@ async function processPage(page) {
     fs.writeFileSync(postPath, finalMarkdown, 'utf8');
     console.log(`✅ 저장: ${postPath}`);
     
+    // 현재 시간을 "마지막 수정일"로 기록
+    const currentDateTime = new Date().toISOString();
+    
     // Notion 상태 업데이트
     await notion.pages.update({
       page_id: page.id,
@@ -99,14 +102,14 @@ async function processPage(page) {
             name: '업로드 완료'
           }
         },
-        '업로드일': {
+        '마지막 수정일': {
           date: {
-            start: new Date().toISOString().split('T')[0]
+            start: currentDateTime
           }
         }
       }
     });
-    console.log(`✅ Notion 상태 업데이트 완료`);
+    console.log(`✅ Notion 상태 업데이트 완료 (마지막 수정일: ${currentDateTime})`);
     
   } catch (error) {
     console.error(`❌ 페이지 처리 실패:`, error);
