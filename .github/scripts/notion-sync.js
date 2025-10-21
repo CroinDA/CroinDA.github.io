@@ -1,5 +1,6 @@
 // Notion → GitHub Pages 완전 자동 동기화 스크립트
 // 이미지 다운로드 및 업로드 포함 (axios 사용)
+// 표(table)와 형광펜(배경색) 지원
 
 const { Client } = require('@notionhq/client');
 const axios = require('axios');
@@ -61,6 +62,10 @@ async function processPage(page) {
     // 이미지 블록 개수 확인
     const imageBlocks = blocks.filter(b => b.type === 'image');
     console.log(`  🖼️ 이미지 블록: ${imageBlocks.length}개`);
+    
+    // 표 블록 개수 확인
+    const tableBlocks = blocks.filter(b => b.type === 'table');
+    console.log(`  📊 표 블록: ${tableBlocks.length}개`);
     
     // 이미지 처리
     const imageMap = await processImages(blocks, date, fileName);
@@ -231,6 +236,11 @@ async function blocksToMarkdown(blocks, imageMap) {
         }
         break;
       
+      case 'table':
+        // 표 처리 - 하위 행들을 가져와서 마크다운 테이블로 변환
+        markdown += await tableToMarkdown(block);
+        break;
+      
       case 'divider':
         markdown += '---\n\n';
         break;
@@ -248,7 +258,53 @@ async function blocksToMarkdown(blocks, imageMap) {
   return markdown.trim();
 }
 
-// Rich Text를 마크다운으로 변환
+// 표를 마크다운으로 변환
+async function tableToMarkdown(tableBlock) {
+  try {
+    console.log(`  📊 표 처리 중...`);
+    
+    // 표의 행(row) 블록들 가져오기
+    const { results: rows } = await notion.blocks.children.list({
+      block_id: tableBlock.id
+    });
+    
+    if (rows.length === 0) {
+      return '';
+    }
+    
+    let markdown = '\n';
+    const hasHeader = tableBlock.table.has_column_header;
+    
+    // 각 행 처리
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      
+      if (row.type === 'table_row') {
+        const cells = row.table_row.cells;
+        
+        // 셀들을 마크다운으로 변환
+        const cellTexts = cells.map(cell => richTextToMarkdown(cell));
+        markdown += '| ' + cellTexts.join(' | ') + ' |\n';
+        
+        // 첫 번째 행이 헤더인 경우, 구분선 추가
+        if (i === 0 && hasHeader) {
+          const separator = cells.map(() => '---').join(' | ');
+          markdown += '| ' + separator + ' |\n';
+        }
+      }
+    }
+    
+    markdown += '\n';
+    console.log(`  ✅ 표 변환 완료 (${rows.length}행)`);
+    return markdown;
+    
+  } catch (error) {
+    console.error(`  ❌ 표 변환 실패:`, error.message);
+    return '';
+  }
+}
+
+// Rich Text를 마크다운으로 변환 (형광펜 지원 추가)
 function richTextToMarkdown(richTextArray) {
   if (!richTextArray || richTextArray.length === 0) return '';
   
@@ -261,11 +317,40 @@ function richTextToMarkdown(richTextArray) {
     if (text.annotations.code) result = `\`${result}\``;
     if (text.annotations.strikethrough) result = `~~${result}~~`;
     
+    // 형광펜(배경색) 지원
+    // Notion의 배경색을 <mark> 태그 또는 HTML span으로 변환
+    const bgColor = text.annotations.color;
+    if (bgColor && bgColor.includes('_background')) {
+      // 배경색이 있는 경우
+      const colorName = bgColor.replace('_background', '');
+      
+      // HTML mark 태그 사용 (가장 호환성 좋음)
+      result = `<mark style="background-color: ${getBackgroundColor(colorName)}">${result}</mark>`;
+    }
+    
     // 링크 적용
     if (text.href) result = `[${result}](${text.href})`;
     
     return result;
   }).join('');
+}
+
+// Notion 배경색을 CSS 색상 코드로 매핑
+function getBackgroundColor(colorName) {
+  const colorMap = {
+    'gray': '#ebeced',
+    'brown': '#e9e5e3',
+    'orange': '#fadec9',
+    'yellow': '#fdecc8',
+    'green': '#dbeddb',
+    'blue': '#d3e5ef',
+    'purple': '#e8deee',
+    'pink': '#f5e0e9',
+    'red': '#ffe2dd',
+    'default': '#fff3cd'  // 기본 노란색 형광펜
+  };
+  
+  return colorMap[colorName] || colorMap['default'];
 }
 
 // Front Matter 생성
