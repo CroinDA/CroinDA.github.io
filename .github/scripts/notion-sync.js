@@ -238,7 +238,7 @@ async function processImages(blocks, date, fileName) {
   return imageMap;
 }
 
-// 블록을 마크다운으로 변환 (중첩 블록 지원)
+// 블록을 마크다운으로 변환 (중첩 블록 완전 지원)
 async function blocksToMarkdown(blocks, imageMap, depth = 0) {
   let markdown = '';
   const indent = '  '.repeat(depth);  // 들여쓰기
@@ -254,18 +254,38 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         } else {
           markdown += indent + paragraphText + '\n\n';
         }
+        
+        // paragraph 내부의 중첩 블록도 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+        }
         break;
       
       case 'heading_1':
         markdown += '# ' + richTextToMarkdown(block.heading_1.rich_text) + '\n\n';
+        
+        // heading 내부의 중첩 블록도 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+        }
         break;
       
       case 'heading_2':
         markdown += '## ' + richTextToMarkdown(block.heading_2.rich_text) + '\n\n';
+        
+        // heading 내부의 중첩 블록도 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+        }
         break;
       
       case 'heading_3':
         markdown += '### ' + richTextToMarkdown(block.heading_3.rich_text) + '\n\n';
+        
+        // heading 내부의 중첩 블록도 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+        }
         break;
       
       case 'bulleted_list_item':
@@ -308,7 +328,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
       case 'code':
         const language = block.code.language || '';
         const code = richTextToMarkdown(block.code.rich_text);
-        markdown += `\`\`\`${language}\n${code}\n\`\`\`\n\n`;
+        markdown += indent + `\`\`\`${language}\n${code}\n\`\`\`\n\n`;
         break;
       
       case 'image':
@@ -329,6 +349,11 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
       
       case 'quote':
         markdown += '> ' + richTextToMarkdown(block.quote.rich_text) + '\n\n';
+        
+        // quote 내부의 중첩 블록도 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+        }
         break;
       
       case 'callout':
@@ -343,6 +368,14 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
       
       case 'equation':
         markdown += `$$\n${block.equation.expression}\n$$\n\n`;
+        break;
+      
+      default:
+        // 알 수 없는 블록 타입도 children 처리
+        if (block.children && block.children.length > 0) {
+          console.log(`  ⚠️ 알 수 없는 블록 타입: ${block.type}, children 처리 진행`);
+          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+        }
         break;
     }
   }
