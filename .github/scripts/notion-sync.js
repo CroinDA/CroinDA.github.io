@@ -1,6 +1,6 @@
 // Notion → GitHub Pages 완전 자동 동기화 스크립트
 // 이미지 다운로드 및 업로드 포함 (axios 사용)
-// 표(table), 형광펜(배경색), 줄바꿈 지원
+// 표(table), 형광펜(배경색), 줄바꿈, 중첩 블록 지원
 
 const { Client } = require('@notionhq/client');
 const axios = require('axios');
@@ -51,27 +51,38 @@ async function processPage(page) {
     const tags = page.properties['태그'].multi_select.map(t => t.name);
     const useMath = page.properties['use_math'].checkbox;
     const authorProfile = page.properties['author_profile'].checkbox;
-    const date = page.properties['작성일'].date?.start || new Date().toISOString().split('T')[0];
+    
+    // 작성일 처리 - 반드시 작성일 속성에서 가져오기
+    let date;
+    if (page.properties['작성일']?.date?.start) {
+      date = page.properties['작성일'].date.start.split('T')[0]; // YYYY-MM-DD 형식
+      console.log(`  📅 작성일 속성: ${date}`);
+    } else {
+      // 작성일이 없으면 오늘 날짜 사용 (경고 표시)
+      date = new Date().toISOString().split('T')[0];
+      console.log(`  ⚠️ 작성일 속성이 없어 오늘 날짜 사용: ${date}`);
+    }
     
     console.log(`\n📝 처리 중: ${title}`);
+    console.log(`  📅 사용할 날짜: ${date}`);
     
-    // 페이지 콘텐츠 가져오기
+    // 페이지 콘텐츠 가져오기 (중첩 블록 포함)
     const blocks = await getPageBlocks(page.id);
     console.log(`  📦 총 ${blocks.length}개 블록 발견`);
     
     // 이미지 블록 개수 확인
-    const imageBlocks = blocks.filter(b => b.type === 'image');
-    console.log(`  🖼️ 이미지 블록: ${imageBlocks.length}개`);
+    const imageBlocks = countBlocksByType(blocks, 'image');
+    console.log(`  🖼️ 이미지 블록: ${imageBlocks}개`);
     
     // 표 블록 개수 확인
-    const tableBlocks = blocks.filter(b => b.type === 'table');
-    console.log(`  📊 표 블록: ${tableBlocks.length}개`);
+    const tableBlocks = countBlocksByType(blocks, 'table');
+    console.log(`  📊 표 블록: ${tableBlocks}개`);
     
     // 이미지 처리
     const imageMap = await processImages(blocks, date, fileName);
     
     // 마크다운 변환
-    const markdown = await blocksToMarkdown(blocks, imageMap);
+    const markdown = await blocksToMarkdown(blocks, imageMap, 0);
     
     // Front Matter 생성
     const frontMatter = createFrontMatter({
@@ -79,13 +90,14 @@ async function processPage(page) {
       categories,
       tags,
       useMath,
-      authorProfile
+      authorProfile,
+      date  // 작성일을 front matter에도 추가
     });
     
     // 최종 마크다운
     const finalMarkdown = `${frontMatter}\n\n${markdown}`;
     
-    // 파일 저장
+    // 파일 저장 - 작성일 기준으로 파일명 생성
     const postPath = path.join('_posts', `${date}-${fileName}.md`);
     fs.writeFileSync(postPath, finalMarkdown, 'utf8');
     console.log(`✅ 저장: ${postPath}`);
@@ -113,27 +125,49 @@ async function processPage(page) {
     
   } catch (error) {
     console.error(`❌ 페이지 처리 실패:`, error);
+    throw error;
   }
 }
 
-// 페이지 블록 가져오기
-async function getPageBlocks(pageId) {
-  const blocks = [];
+// 특정 타입의 블록 개수 세기 (재귀적)
+function countBlocksByType(blocks, type) {
+  let count = 0;
+  for (const block of blocks) {
+    if (block.type === type) count++;
+    if (block.children) {
+      count += countBlocksByType(block.children, type);
+    }
+  }
+  return count;
+}
+
+// 페이지 블록 가져오기 (중첩 블록 포함)
+async function getPageBlocks(blockId, depth = 0) {
+  const allBlocks = [];
   let cursor;
   
   while (true) {
     const { results, next_cursor } = await notion.blocks.children.list({
-      block_id: pageId,
+      block_id: blockId,
       start_cursor: cursor
     });
     
-    blocks.push(...results);
+    for (const block of results) {
+      allBlocks.push(block);
+      
+      // 자식 블록이 있는 경우 재귀적으로 가져오기
+      if (block.has_children) {
+        const children = await getPageBlocks(block.id, depth + 1);
+        block.children = children;  // 블록 객체에 children 추가
+        console.log(`  🔍 중첩 블록 발견 (레벨 ${depth + 1}): ${children.length}개`);
+      }
+    }
     
     if (!next_cursor) break;
     cursor = next_cursor;
   }
   
-  return blocks;
+  return allBlocks;
 }
 
 // 이미지 처리 (다운로드 및 저장) - axios 사용
@@ -147,68 +181,78 @@ async function processImages(blocks, date, fileName) {
     fs.mkdirSync(imageDir, { recursive: true });
   }
   
-  for (const block of blocks) {
-    if (block.type === 'image') {
-      // Notion API의 이미지 URL 추출
-      let imageUrl = null;
-      
-      if (block.image.type === 'file') {
-        imageUrl = block.image.file.url;
-      } else if (block.image.type === 'external') {
-        imageUrl = block.image.external.url;
+  // 재귀적으로 모든 이미지 블록 찾기
+  async function findImages(blockList) {
+    for (const block of blockList) {
+      if (block.type === 'image') {
+        // Notion API의 이미지 URL 추출
+        let imageUrl = null;
+        
+        if (block.image.type === 'file') {
+          imageUrl = block.image.file.url;
+        } else if (block.image.type === 'external') {
+          imageUrl = block.image.external.url;
+        }
+        
+        if (imageUrl) {
+          console.log(`  📸 이미지 ${imageIndex} 다운로드 중... (${imageUrl.substring(0, 50)}...)`);
+          
+          try {
+            // axios로 이미지 다운로드
+            const response = await axios.get(imageUrl, {
+              responseType: 'arraybuffer',
+              timeout: 30000
+            });
+            
+            // 파일명 생성
+            const ext = path.extname(imageUrl.split('?')[0]) || '.png';
+            const imageName = `image${imageIndex}${ext}`;
+            const imagePath = path.join(imageDir, imageName);
+            
+            // 이미지 저장
+            fs.writeFileSync(imagePath, response.data);
+            
+            // 경로 매핑
+            const relativePath = `/images/${date}-${fileName}/${imageName}`;
+            imageMap.set(block.id, relativePath);
+            
+            console.log(`  ✅ 저장: ${imagePath}`);
+            imageIndex++;
+            
+          } catch (error) {
+            console.error(`  ❌ 이미지 다운로드 실패:`, error.message);
+          }
+        } else {
+          console.log(`  ⚠️ 이미지 URL을 찾을 수 없습니다`);
+        }
       }
       
-      if (imageUrl) {
-        console.log(`  📸 이미지 ${imageIndex} 다운로드 중... (${imageUrl.substring(0, 50)}...)`);
-        
-        try {
-          // axios로 이미지 다운로드
-          const response = await axios.get(imageUrl, {
-            responseType: 'arraybuffer',
-            timeout: 30000
-          });
-          
-          // 파일명 생성
-          const ext = path.extname(imageUrl.split('?')[0]) || '.png';
-          const imageName = `image${imageIndex}${ext}`;
-          const imagePath = path.join(imageDir, imageName);
-          
-          // 이미지 저장
-          fs.writeFileSync(imagePath, response.data);
-          
-          // 경로 매핑
-          const relativePath = `/images/${date}-${fileName}/${imageName}`;
-          imageMap.set(block.id, relativePath);
-          
-          console.log(`  ✅ 저장: ${imagePath}`);
-          imageIndex++;
-          
-        } catch (error) {
-          console.error(`  ❌ 이미지 다운로드 실패:`, error.message);
-        }
-      } else {
-        console.log(`  ⚠️ 이미지 URL을 찾을 수 없습니다`);
+      // 중첩된 블록의 이미지도 처리
+      if (block.children) {
+        await findImages(block.children);
       }
     }
   }
   
+  await findImages(blocks);
   return imageMap;
 }
 
-// 블록을 마크다운으로 변환 (줄바꿈 지원 추가)
-async function blocksToMarkdown(blocks, imageMap) {
+// 블록을 마크다운으로 변환 (중첩 블록 지원)
+async function blocksToMarkdown(blocks, imageMap, depth = 0) {
   let markdown = '';
+  const indent = '  '.repeat(depth);  // 들여쓰기
   
   for (const block of blocks) {
     switch (block.type) {
       case 'paragraph':
         const paragraphText = richTextToMarkdown(block.paragraph.rich_text);
         
-        // 빈 paragraph는 줄바꿈으로 처리 (엔터 한 번 친 효과)
+        // 빈 paragraph는 줄바꿈으로 처리
         if (paragraphText.trim() === '') {
           markdown += '<br>\n\n';
         } else {
-          markdown += paragraphText + '\n\n';
+          markdown += indent + paragraphText + '\n\n';
         }
         break;
       
@@ -225,11 +269,40 @@ async function blocksToMarkdown(blocks, imageMap) {
         break;
       
       case 'bulleted_list_item':
-        markdown += '- ' + richTextToMarkdown(block.bulleted_list_item.rich_text) + '\n';
+        markdown += indent + '- ' + richTextToMarkdown(block.bulleted_list_item.rich_text) + '\n';
+        
+        // 중첩된 리스트 항목 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+        }
         break;
       
       case 'numbered_list_item':
-        markdown += '1. ' + richTextToMarkdown(block.numbered_list_item.rich_text) + '\n';
+        markdown += indent + '1. ' + richTextToMarkdown(block.numbered_list_item.rich_text) + '\n';
+        
+        // 중첩된 리스트 항목 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+        }
+        break;
+      
+      case 'to_do':
+        const checked = block.to_do.checked ? '[x]' : '[ ]';
+        markdown += indent + `- ${checked} ` + richTextToMarkdown(block.to_do.rich_text) + '\n';
+        
+        // 중첩된 항목 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+        }
+        break;
+      
+      case 'toggle':
+        markdown += indent + '- ' + richTextToMarkdown(block.toggle.rich_text) + '\n';
+        
+        // 토글 내부 콘텐츠 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+        }
         break;
       
       case 'code':
@@ -242,12 +315,11 @@ async function blocksToMarkdown(blocks, imageMap) {
         const imagePath = imageMap.get(block.id);
         if (imagePath) {
           const caption = richTextToMarkdown(block.image.caption);
-          markdown += `![${caption}](${imagePath})\n\n`;
+          markdown += indent + `![${caption}](${imagePath})\n\n`;
         }
         break;
       
       case 'table':
-        // 표 처리 - 하위 행들을 가져와서 마크다운 테이블로 변환
         markdown += await tableToMarkdown(block);
         break;
       
@@ -259,13 +331,23 @@ async function blocksToMarkdown(blocks, imageMap) {
         markdown += '> ' + richTextToMarkdown(block.quote.rich_text) + '\n\n';
         break;
       
+      case 'callout':
+        const calloutText = richTextToMarkdown(block.callout.rich_text);
+        markdown += `> 💡 ${calloutText}\n\n`;
+        
+        // callout 내부 콘텐츠 처리
+        if (block.children && block.children.length > 0) {
+          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+        }
+        break;
+      
       case 'equation':
         markdown += `$$\n${block.equation.expression}\n$$\n\n`;
         break;
     }
   }
   
-  return markdown.trim();
+  return markdown;
 }
 
 // 표를 마크다운으로 변환
@@ -328,13 +410,9 @@ function richTextToMarkdown(richTextArray) {
     if (text.annotations.strikethrough) result = `~~${result}~~`;
     
     // 형광펜(배경색) 지원
-    // Notion의 배경색을 <mark> 태그 또는 HTML span으로 변환
     const bgColor = text.annotations.color;
     if (bgColor && bgColor.includes('_background')) {
-      // 배경색이 있는 경우
       const colorName = bgColor.replace('_background', '');
-      
-      // HTML mark 태그 사용 (가장 호환성 좋음)
       result = `<mark style="background-color: ${getBackgroundColor(colorName)}">${result}</mark>`;
     }
     
@@ -357,20 +435,21 @@ function getBackgroundColor(colorName) {
     'purple': '#e8deee',
     'pink': '#f5e0e9',
     'red': '#ffe2dd',
-    'default': '#fff3cd'  // 기본 노란색 형광펜
+    'default': '#fff3cd'
   };
   
   return colorMap[colorName] || colorMap['default'];
 }
 
 // Front Matter 생성
-function createFrontMatter({ title, categories, tags, useMath, authorProfile }) {
+function createFrontMatter({ title, categories, tags, useMath, authorProfile, date }) {
   const categoriesStr = categories.map(c => `  - ${c}`).join('\n');
   const tagsStr = tags.map(t => `  - ${t}`).join('\n');
   
   return `---
 layout: single
 title: "${title}"
+date: ${date}
 categories:
 ${categoriesStr}
 tags:
