@@ -1,6 +1,6 @@
 // Notion → GitHub Pages 완전 자동 동기화 스크립트
 // 이미지 다운로드 및 업로드 포함 (axios 사용)
-// 표(table), 형광펜(배경색), 줄바꿈, 중첩 블록 지원
+// 표(table), 형광펜(배경색), 줄바꿈, 중첩 블록, 인라인 수식 지원
 
 const { Client } = require('@notionhq/client');
 const axios = require('axios');
@@ -241,7 +241,7 @@ async function processImages(blocks, date, fileName) {
 // 블록을 마크다운으로 변환 (중첩 블록 완전 지원)
 async function blocksToMarkdown(blocks, imageMap, depth = 0) {
   let markdown = '';
-  const indent = '  '.repeat(depth);  // 들여쓰기
+  const indent = '    '.repeat(depth);  // 들여쓰기 4칸으로 변경 (Jekyll/Kramdown 표준)
   
   for (const block of blocks) {
     switch (block.type) {
@@ -429,11 +429,16 @@ async function tableToMarkdown(tableBlock) {
   }
 }
 
-// Rich Text를 마크다운으로 변환 (형광펜 지원 추가)
+// Rich Text를 마크다운으로 변환 (형광펜 + 인라인 수식 지원)
 function richTextToMarkdown(richTextArray) {
   if (!richTextArray || richTextArray.length === 0) return '';
   
   return richTextArray.map(text => {
+    // 인라인 수식 처리 (equation 타입)
+    if (text.type === 'equation') {
+      return `$${text.equation.expression}$`;
+    }
+    
     let result = text.plain_text;
     
     // 스타일 적용
