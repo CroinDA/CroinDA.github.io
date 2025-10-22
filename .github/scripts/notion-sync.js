@@ -434,9 +434,10 @@ function richTextToMarkdown(richTextArray) {
   if (!richTextArray || richTextArray.length === 0) return '';
   
   return richTextArray.map(text => {
-    // 인라인 수식 처리 (equation 타입)
+    // 인라인 수식 처리 (equation 타입) - 백슬래시 escape 방지
     if (text.type === 'equation') {
-      return `$${text.equation.expression}$`;
+      // Double dollar로 변경 (Jekyll MathJax 표준)
+      return `$$${text.equation.expression}$$`;
     }
     
     let result = text.plain_text;
