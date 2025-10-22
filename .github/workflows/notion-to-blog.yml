@@ -24,13 +24,17 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0  # 전체 히스토리 가져오기
+          fetch-depth: 0
       
-      - name: Pull latest changes
+      - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin master || echo "No changes to pull"
+      
+      - name: Pull and merge latest changes
+        run: |
+          git fetch origin master
+          git reset --hard origin/master
       
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -63,11 +67,11 @@ jobs:
         run: node .github/scripts/notion-sync.js
       
       - name: Commit and Push Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Auto-sync from Notion [skip ci]"
-          file_pattern: "_posts/ images/"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          skip_dirty_check: false
-          push_options: '--force-with-lease'
+        run: |
+          git add _posts/ images/
+          if git diff --staged --quiet; then
+            echo "변경사항 없음"
+          else
+            git commit -m "Auto-sync from Notion [skip ci]"
+            git push origin master
+          fi
