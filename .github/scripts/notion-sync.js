@@ -241,9 +241,11 @@ async function processImages(blocks, date, fileName) {
 // 블록을 마크다운으로 변환 (중첩 블록 완전 지원)
 async function blocksToMarkdown(blocks, imageMap, depth = 0) {
   let markdown = '';
-  const indent = '    '.repeat(depth);  // 들여쓰기 4칸으로 변경 (Jekyll/Kramdown 표준)
+  let currentDepth = depth;  // depth를 로컬 변수로 관리
   
   for (const block of blocks) {
+    const indent = '    '.repeat(currentDepth);  // 들여쓰기 4칸
+    
     switch (block.type) {
       case 'paragraph':
         const paragraphText = richTextToMarkdown(block.paragraph.rich_text);
@@ -257,7 +259,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // paragraph 내부의 중첩 블록도 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth);
         }
         break;
       
@@ -266,7 +268,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // heading 내부의 중첩 블록도 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth);
         }
         break;
       
@@ -275,7 +277,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // heading 내부의 중첩 블록도 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth);
         }
         break;
       
@@ -284,7 +286,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // heading 내부의 중첩 블록도 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth);
         }
         break;
       
@@ -293,7 +295,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // 중첩된 리스트 항목 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth + 1);
         }
         break;
       
@@ -302,7 +304,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // 중첩된 리스트 항목 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth + 1);
         }
         break;
       
@@ -312,7 +314,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // 중첩된 항목 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth + 1);
         }
         break;
       
@@ -321,7 +323,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // 토글 내부 콘텐츠 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth + 1);
         }
         break;
       
@@ -340,8 +342,9 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         break;
       
       case 'table':
-        // 표는 항상 depth=0으로 처리 (들여쓰기 없음)
+        // 표는 항상 depth=0으로 처리하고, 표 이후 depth를 0으로 리셋
         markdown += await tableToMarkdown(block);
+        currentDepth = 0;  // 표 이후 depth를 0으로 리셋
         break;
       
       case 'divider':
@@ -353,7 +356,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // quote 내부의 중첩 블록도 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth);
         }
         break;
       
@@ -363,7 +366,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         
         // callout 내부 콘텐츠 처리
         if (block.children && block.children.length > 0) {
-          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth);
         }
         break;
       
@@ -375,7 +378,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         // 알 수 없는 블록 타입도 children 처리
         if (block.children && block.children.length > 0) {
           console.log(`  ⚠️ 알 수 없는 블록 타입: ${block.type}, children 처리 진행`);
-          markdown += await blocksToMarkdown(block.children, imageMap, depth);
+          markdown += await blocksToMarkdown(block.children, imageMap, currentDepth);
         }
         break;
     }
