@@ -36,7 +36,7 @@ async function syncNotionToBlog() {
     console.log('✅ 동기화 완료!');
     
   } catch (error) {
-    console.error('❌ 오류 발생:', error);
+    console.error('❌오류 발생:', error);
     process.exit(1);
   }
 }
@@ -441,10 +441,10 @@ function richTextToMarkdown(richTextArray, inTableCell = false) {
     
     let result = text.plain_text;
     
-    // 줄바꿈 처리 - Notion의 \n을 HTML <br>로 변환
+    // 줄바꿈 처리 - Notion의 \n을 HTML <br><br>로 변환
     // 표 셀 안과 일반 텍스트 모두 적용
     if (result.includes('\n')) {
-      result = result.replace(/\n/g, '<br>');
+      result = result.replace(/\n/g, '<br><br>');
     }
     
     // 스타일 적용
