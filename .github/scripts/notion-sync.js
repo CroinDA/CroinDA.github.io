@@ -419,7 +419,7 @@ async function tableToMarkdown(tableBlock) {
       }
     }
     
-    markdown += '\n';
+    markdown += '\n\n';  // 표 뒤에 빈 줄 2개 추가 (Jekyll/Kramdown 파싱 개선)
     console.log(`  ✅ 표 변환 완료 (${rows.length}행)`);
     return markdown;
     
