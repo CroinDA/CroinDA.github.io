@@ -397,7 +397,8 @@ async function tableToMarkdown(tableBlock) {
       return '';
     }
     
-    let markdown = '\n';
+    // 표 시작 전에 빈 줄 추가 (Jekyll/Kramdown 파싱 개선)
+    let markdown = '\n\n';
     const hasHeader = tableBlock.table.has_column_header;
     
     // 각 행 처리
@@ -419,7 +420,8 @@ async function tableToMarkdown(tableBlock) {
       }
     }
     
-    markdown += '\n\n';  // 표 뒤에 빈 줄 2개 추가 (Jekyll/Kramdown 파싱 개선)
+    // 표 끝에 빈 줄 3개 추가 (Jekyll/Kramdown 파싱 개선)
+    markdown += '\n\n\n';
     console.log(`  ✅ 표 변환 완료 (${rows.length}행)`);
     return markdown;
     
