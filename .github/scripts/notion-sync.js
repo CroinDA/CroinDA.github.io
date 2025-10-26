@@ -340,6 +340,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         break;
       
       case 'table':
+        // 표는 항상 depth=0으로 처리 (들여쓰기 없음)
         markdown += await tableToMarkdown(block);
         break;
       
@@ -383,7 +384,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
   return markdown;
 }
 
-// 표를 마크다운으로 변환
+// 표를 마크다운으로 변환 (들여쓰기 없이 처리)
 async function tableToMarkdown(tableBlock) {
   try {
     console.log(`  📊 표 처리 중...`);
@@ -401,7 +402,7 @@ async function tableToMarkdown(tableBlock) {
     let markdown = '\n\n';
     const hasHeader = tableBlock.table.has_column_header;
     
-    // 각 행 처리
+    // 각 행 처리 (들여쓰기 없음!)
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       
