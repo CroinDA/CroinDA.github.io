@@ -407,8 +407,8 @@ async function tableToMarkdown(tableBlock) {
       if (row.type === 'table_row') {
         const cells = row.table_row.cells;
         
-        // 셀들을 마크다운으로 변환
-        const cellTexts = cells.map(cell => richTextToMarkdown(cell));
+        // 셀들을 마크다운으로 변환 (줄바꿈 처리 포함)
+        const cellTexts = cells.map(cell => richTextToMarkdown(cell, true));
         markdown += '| ' + cellTexts.join(' | ') + ' |\n';
         
         // 첫 번째 행이 헤더인 경우, 구분선 추가
@@ -429,8 +429,8 @@ async function tableToMarkdown(tableBlock) {
   }
 }
 
-// Rich Text를 마크다운으로 변환 (형광펜 + 인라인 수식 지원)
-function richTextToMarkdown(richTextArray) {
+// Rich Text를 마크다운으로 변환 (형광펜 + 인라인 수식 + 줄바꿈 지원)
+function richTextToMarkdown(richTextArray, inTableCell = false) {
   if (!richTextArray || richTextArray.length === 0) return '';
   
   return richTextArray.map(text => {
@@ -440,6 +440,12 @@ function richTextToMarkdown(richTextArray) {
     }
     
     let result = text.plain_text;
+    
+    // 줄바꿈 처리 - Notion의 \n을 HTML <br>로 변환
+    // 표 셀 안과 일반 텍스트 모두 적용
+    if (result.includes('\n')) {
+      result = result.replace(/\n/g, '<br>');
+    }
     
     // 스타일 적용
     if (text.annotations.bold) result = `**${result}**`;
