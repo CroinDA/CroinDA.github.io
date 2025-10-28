@@ -469,15 +469,15 @@ function richTextToMarkdown(richTextArray, inTableCell = false) {
     
     let result = text.plain_text;
     
-    // 줄바꿈 처리 - Notion의 \n을 HTML <br><br>로 변환
+    // 줄바꿈 처리 - Notion의 shift+enter를 단일 줄바꿈으로 변환
     // 표 셀 안과 일반 텍스트 모두 적용
     if (result.includes('\n')) {
-      result = result.replace(/\n/g, '<br><br>');
+      result = result.replace(/\n/g, '<br>');
     }
     
     // 스타일 적용
     if (text.annotations.bold) result = `**${result}**`;
-    if (text.annotations.italic) result = `*${result}*`;
+    if (text.annotations.italic) result = `*${result}**`;
     if (text.annotations.code) result = `\`${result}\``;
     if (text.annotations.strikethrough) result = `~~${result}~~`;
     
