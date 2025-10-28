@@ -242,8 +242,14 @@ async function processImages(blocks, date, fileName) {
 async function blocksToMarkdown(blocks, imageMap, depth = 0) {
   let markdown = '';
   
-  for (const block of blocks) {
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
+    const nextBlock = blocks[i + 1];
     const indent = '    '.repeat(depth);  // 들여쓰기 4칸
+    
+    // 리스트 타입인지 확인
+    const isListType = ['bulleted_list_item', 'numbered_list_item', 'to_do'].includes(block.type);
+    const nextIsListType = nextBlock && ['bulleted_list_item', 'numbered_list_item', 'to_do'].includes(nextBlock.type);
     
     switch (block.type) {
       case 'paragraph':
@@ -296,6 +302,11 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         if (block.children && block.children.length > 0) {
           markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
         }
+        
+        // 다음 블록이 리스트가 아니면 빈 줄 추가 (문단 분리)
+        if (!nextIsListType) {
+          markdown += '\n';
+        }
         break;
       
       case 'numbered_list_item':
@@ -304,6 +315,11 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         // 중첩된 리스트 항목 처리
         if (block.children && block.children.length > 0) {
           markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+        }
+        
+        // 다음 블록이 리스트가 아니면 빈 줄 추가 (문단 분리)
+        if (!nextIsListType) {
+          markdown += '\n';
         }
         break;
       
@@ -314,6 +330,11 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         // 중첩된 항목 처리
         if (block.children && block.children.length > 0) {
           markdown += await blocksToMarkdown(block.children, imageMap, depth + 1);
+        }
+        
+        // 다음 블록이 리스트가 아니면 빈 줄 추가 (문단 분리)
+        if (!nextIsListType) {
+          markdown += '\n';
         }
         break;
       
