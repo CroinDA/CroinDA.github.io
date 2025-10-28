@@ -336,7 +336,8 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         const imagePath = imageMap.get(block.id);
         if (imagePath) {
           const caption = richTextToMarkdown(block.image.caption);
-          markdown += indent + `![${caption}](${imagePath})\n\n`;
+          // 이미지 앞에 빈 줄 추가로 블록 레벨 요소로 만들기
+          markdown += '\n' + indent + `![${caption}](${imagePath})\n\n`;
         }
         break;
       
