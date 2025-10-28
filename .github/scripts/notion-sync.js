@@ -341,7 +341,7 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
         break;
       
       case 'table':
-        markdown += await tableToMarkdown(block);
+        markdown += await tableToMarkdown(block, depth);
         break;
       
       case 'divider':
@@ -384,10 +384,10 @@ async function blocksToMarkdown(blocks, imageMap, depth = 0) {
   return markdown;
 }
 
-// 표를 마크다운으로 변환 (들여쓰기 없이 처리)
-async function tableToMarkdown(tableBlock) {
+// 표를 마크다운으로 변환 (들여쓰기 지원)
+async function tableToMarkdown(tableBlock, depth = 0) {
   try {
-    console.log(`  📊 표 처리 중...`);
+    console.log(`  📊 표 처리 중... (depth: ${depth})`);
     
     // 표의 행(row) 블록들 가져오기
     const { results: rows } = await notion.blocks.children.list({
@@ -398,11 +398,14 @@ async function tableToMarkdown(tableBlock) {
       return '';
     }
     
+    // 들여쓰기 계산
+    const indent = '    '.repeat(depth);
+    
     // 표 시작 전에 빈 줄 추가 (Jekyll/Kramdown 파싱 개선)
     let markdown = '\n\n';
     const hasHeader = tableBlock.table.has_column_header;
     
-    // 각 행 처리 (들여쓰기 없음!)
+    // 각 행 처리 (들여쓰기 적용)
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       
@@ -411,19 +414,19 @@ async function tableToMarkdown(tableBlock) {
         
         // 셀들을 마크다운으로 변환 (줄바꿈 처리 포함)
         const cellTexts = cells.map(cell => richTextToMarkdown(cell, true));
-        markdown += '| ' + cellTexts.join(' | ') + ' |\n';
+        markdown += indent + '| ' + cellTexts.join(' | ') + ' |\n';
         
         // 첫 번째 행이 헤더인 경우, 구분선 추가
         if (i === 0 && hasHeader) {
           const separator = cells.map(() => '---').join(' | ');
-          markdown += '| ' + separator + ' |\n';
+          markdown += indent + '| ' + separator + ' |\n';
         }
       }
     }
     
     // 표 끝에 빈 줄 3개 추가 (Jekyll/Kramdown 파싱 개선)
     markdown += '\n\n\n';
-    console.log(`  ✅ 표 변환 완료 (${rows.length}행)`);
+    console.log(`  ✅ 표 변환 완료 (${rows.length}행, depth: ${depth})`);
     return markdown;
     
   } catch (error) {
