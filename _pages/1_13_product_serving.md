@@ -1,8 +1,8 @@
 ---
 title: Product Serving
 layout: category
-permalink: /recsys_basics/
-taxonomy: recsys_basics
+permalink: /product_serving/
+taxonomy: product_serving
 sidebar:
   nav: docs
 ---
