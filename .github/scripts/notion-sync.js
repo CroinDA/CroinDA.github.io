@@ -1,6 +1,7 @@
 // Notion → GitHub Pages 완전 자동 동기화 스크립트
 // 이미지 다운로드 및 업로드 포함 (axios 사용)
 // 표(table), 형광펜(배경색), 줄바꿈, 중첩 블록, 인라인 수식 지원
+// "삭제 요청" 상태 처리 기능 추가
 
 const { Client } = require('@notionhq/client');
 const axios = require('axios');
@@ -16,7 +17,10 @@ async function syncNotionToBlog() {
   console.log('🔄 Notion 동기화 시작...');
   
   try {
-    // "업로드 준비" 상태인 페이지 가져오기 (상태 기반으로만 작동)
+    // 1. "삭제 요청" 상태인 페이지 처리
+    await handleDeleteRequests();
+    
+    // 2. "업로드 준비" 상태인 페이지 처리
     const response = await notion.databases.query({
       database_id: databaseId,
       filter: {
@@ -38,6 +42,96 @@ async function syncNotionToBlog() {
   } catch (error) {
     console.error('❌오류 발생:', error);
     process.exit(1);
+  }
+}
+
+// "삭제 요청" 상태 페이지 처리
+async function handleDeleteRequests() {
+  console.log('\n🗑️ 삭제 요청 페이지 확인 중...');
+  
+  try {
+    const response = await notion.databases.query({
+      database_id: databaseId,
+      filter: {
+        property: '상태',
+        select: {
+          equals: '삭제 요청'
+        }
+      }
+    });
+    
+    if (response.results.length === 0) {
+      console.log('  ℹ️ 삭제 요청된 페이지 없음');
+      return;
+    }
+    
+    console.log(`  🗑️ ${response.results.length}개의 삭제 요청 페이지 발견`);
+    
+    for (const page of response.results) {
+      await deletePage(page);
+    }
+    
+  } catch (error) {
+    console.error('❌ 삭제 요청 처리 실패:', error);
+  }
+}
+
+// 페이지 삭제 처리
+async function deletePage(page) {
+  try {
+    const title = page.properties['제목'].title[0]?.plain_text || 'Untitled';
+    const fileName = page.properties['파일명'].rich_text[0]?.plain_text || 'untitled';
+    
+    // 작성일 가져오기
+    let date;
+    if (page.properties['작성일']?.date?.start) {
+      date = page.properties['작성일'].date.start.split('T')[0];
+    } else {
+      console.log(`  ⚠️ "${title}" - 작성일 정보 없음, 삭제 건너뜀`);
+      return;
+    }
+    
+    console.log(`\n🗑️ 삭제 처리 중: ${title}`);
+    
+    // 1. _posts 폴더에서 마크다운 파일 삭제
+    const postPath = path.join('_posts', `${date}-${fileName}.md`);
+    if (fs.existsSync(postPath)) {
+      fs.unlinkSync(postPath);
+      console.log(`  ✅ 파일 삭제: ${postPath}`);
+    } else {
+      console.log(`  ⚠️ 파일 없음: ${postPath}`);
+    }
+    
+    // 2. images 폴더에서 이미지 폴더 삭제
+    const imageDir = path.join('images', `${date}-${fileName}`);
+    if (fs.existsSync(imageDir)) {
+      fs.rmSync(imageDir, { recursive: true, force: true });
+      console.log(`  ✅ 이미지 폴더 삭제: ${imageDir}`);
+    } else {
+      console.log(`  ℹ️ 이미지 폴더 없음: ${imageDir}`);
+    }
+    
+    // 3. Notion 페이지 상태를 "삭제 완료"로 업데이트
+    const currentDateTime = new Date().toISOString();
+    await notion.pages.update({
+      page_id: page.id,
+      properties: {
+        '상태': {
+          select: {
+            name: '삭제 완료'
+          }
+        },
+        '마지막 수정일': {
+          date: {
+            start: currentDateTime
+          }
+        }
+      }
+    });
+    console.log(`  ✅ Notion 상태 업데이트: 삭제 완료 (${currentDateTime})`);
+    
+  } catch (error) {
+    console.error(`  ❌ 페이지 삭제 실패:`, error);
   }
 }
 
