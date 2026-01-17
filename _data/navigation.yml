@@ -76,6 +76,16 @@ docs:
         url: /audio_background/
       - title: "논문 리뷰"
         url: /audio_paper_review/
+  - title: "2026-ADsP"
+    children:
+      - title: "데이터의 이해"
+        url: /adsp_data_basic/
+      - title: "데이터 분석 기획"
+        url: /adsp_data_analyze/
+      - title: "R기초 / 데이터마트 / 통계분석"
+        url: /adsp_R_datamart_stats/
+      - title: "정형 데이터 마이닝"
+        url: /adsp_data_mining/
   # - title: "도와주세요"
   #   children:
   #     - title: "도와주세요"
