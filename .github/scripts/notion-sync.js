@@ -2,6 +2,7 @@
 // 이미지 다운로드 및 업로드 포함 (axios 사용)
 // 표(table), 형광펜(배경색), 줄바꿈, 중첩 블록, 인라인 수식 지원
 // "삭제 요청" 상태 처리 기능 추가
+// 파일명 기준 중복 방지 및 업데이트 지원
 
 const { Client } = require('@notionhq/client');
 const axios = require('axios');
@@ -135,7 +136,57 @@ async function deletePage(page) {
   }
 }
 
-// 페이지 처리
+// 파일명으로 기존 파일 찾기 (모든 날짜 패턴 검색)
+function findExistingFileByFileName(fileName) {
+  const postsDir = '_posts';
+  
+  if (!fs.existsSync(postsDir)) {
+    return null;
+  }
+  
+  // _posts 폴더의 모든 파일 검색
+  const files = fs.readdirSync(postsDir);
+  
+  // YYYY-MM-DD-{fileName}.md 패턴으로 검색
+  const pattern = new RegExp(`^\\d{4}-\\d{2}-\\d{2}-${fileName}\\.md$`);
+  
+  for (const file of files) {
+    if (pattern.test(file)) {
+      console.log(`  🔍 기존 파일 발견: ${file}`);
+      return file;
+    }
+  }
+  
+  return null;
+}
+
+// 파일명으로 기존 이미지 폴더 찾기
+function findExistingImageDirByFileName(fileName) {
+  const imagesDir = 'images';
+  
+  if (!fs.existsSync(imagesDir)) {
+    return null;
+  }
+  
+  // images 폴더의 모든 디렉토리 검색
+  const dirs = fs.readdirSync(imagesDir, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
+  
+  // YYYY-MM-DD-{fileName} 패턴으로 검색
+  const pattern = new RegExp(`^\\d{4}-\\d{2}-\\d{2}-${fileName}$`);
+  
+  for (const dir of dirs) {
+    if (pattern.test(dir)) {
+      console.log(`  🔍 기존 이미지 폴더 발견: ${dir}`);
+      return dir;
+    }
+  }
+  
+  return null;
+}
+
+// 페이지 처리 (파일명 기준 업데이트 지원)
 async function processPage(page) {
   try {
     // 페이지 속성 추출
@@ -158,7 +209,24 @@ async function processPage(page) {
     }
     
     console.log(`\n📝 처리 중: ${title}`);
+    console.log(`  📁 파일명: ${fileName}`);
     console.log(`  📅 사용할 날짜: ${date}`);
+    
+    // 기존 파일 확인 및 삭제 (파일명 기준)
+    const existingFile = findExistingFileByFileName(fileName);
+    if (existingFile) {
+      const oldFilePath = path.join('_posts', existingFile);
+      fs.unlinkSync(oldFilePath);
+      console.log(`  🗑️ 기존 파일 삭제: ${oldFilePath}`);
+    }
+    
+    // 기존 이미지 폴더 확인 및 삭제 (파일명 기준)
+    const existingImageDir = findExistingImageDirByFileName(fileName);
+    if (existingImageDir) {
+      const oldImagePath = path.join('images', existingImageDir);
+      fs.rmSync(oldImagePath, { recursive: true, force: true });
+      console.log(`  🗑️ 기존 이미지 폴더 삭제: ${oldImagePath}`);
+    }
     
     // 페이지 콘텐츠 가져오기 (중첩 블록 포함)
     const blocks = await getPageBlocks(page.id);
