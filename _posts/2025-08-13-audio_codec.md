@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "Audio Codec: 전통적 압축방식"
 categories:
   - audio_background

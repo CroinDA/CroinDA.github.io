@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[ML / ML 개요] EDA / Feature Engineering"
 categories:
   - ml_in_practice

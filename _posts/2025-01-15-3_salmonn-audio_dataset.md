@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "Audio Benchmark Dataset(SALMONN: Paper Review)"
 categories:
   - hackathon_audiodata

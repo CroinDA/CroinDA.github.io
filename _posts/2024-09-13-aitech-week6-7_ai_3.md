@@ -1,5 +1,4 @@
 ---
-layout: single
 title: Streamlit을 활용한 웹 프로토타입 구현하기
 categories:
   - basic_ai_development

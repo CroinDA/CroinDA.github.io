@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[ML / 모델 학습 파이프라인] 모델 과적합 / 모델 교차 검증"
 categories:
   - ml_in_practice

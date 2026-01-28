@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[Python/파이썬][Greedy/그리디] 백준 2839번 - 설탕 배달"
 categories:
   - python_algorithm_study

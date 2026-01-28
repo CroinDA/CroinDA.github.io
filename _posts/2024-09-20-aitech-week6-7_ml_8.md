@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[ML/모델 튜닝 기법] 하이퍼파라미터 튜닝 (Hyperparameter Tune)"
 categories:
   - ml_in_practice

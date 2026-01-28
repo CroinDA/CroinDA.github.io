@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[NLP 이론 / RNN] 순환 신경망(RNN, Recurrent Neural Network)과 Language Modeling"
 categories:
   - nlp_basic

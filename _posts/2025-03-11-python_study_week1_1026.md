@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[Python/파이썬][Greedy/그리디] 백준 1026번 - 보물"
 categories:
   - python_algorithm_study

@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[ML/모델 튜닝 기법] 앙상블"
 categories:
   - ml_in_practice

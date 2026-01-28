@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "오디오 데이터(소리)의 기본 개념: 샘플링 / 샘플링 속도 / 주파수 / 진동 / 진폭 / 비트뎁스 / 파형"
 categories:
   - audio_background

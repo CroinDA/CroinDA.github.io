@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[ML/실험 관리] 머신러닝 모델 실험 관리"
 categories:
   - ml_in_practice

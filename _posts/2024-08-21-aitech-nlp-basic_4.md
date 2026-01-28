@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[NLP 이론 / RNN] RNN의 문제점: Exploding Gradient(기울기 폭발), Vanishing Gradient(기울기 소실)"
 categories:
   - nlp_basic

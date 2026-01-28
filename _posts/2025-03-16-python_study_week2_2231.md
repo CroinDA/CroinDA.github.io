@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "[Python/파이썬][완전탐색] 백준 2231번 - 분해합"
 categories:
   - python_algorithm_study

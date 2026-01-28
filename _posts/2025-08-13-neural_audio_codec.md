@@ -1,5 +1,4 @@
 ---
-layout: single
 title: "Audio Codec: Neural Audio Codec"
 categories:
   - audio_background
