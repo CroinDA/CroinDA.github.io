@@ -331,154 +331,202 @@
     {% endif %}
 
     <script>
-        // Copy code button for code blocks
-        document.querySelectorAll('.highlight').forEach((block) => {
-            const button = document.createElement('button');
-            button.className = 'absolute top-2 right-2 px-3 py-1.5 bg-surface-dark hover:bg-surface-dark/80 text-gray-400 hover:text-white text-xs font-mono rounded transition-colors flex items-center gap-1';
-            button.innerHTML = '<span class="material-symbols-outlined !text-[14px]">content_copy</span> Copy';
+    document.addEventListener('DOMContentLoaded', function() {
+        // ========== Toast Notification ==========
+        function showToast(message) {
+            const existingToast = document.getElementById('toast-notification');
+            if (existingToast) existingToast.remove();
 
-            button.addEventListener('click', () => {
-                const code = block.querySelector('code').textContent;
-                navigator.clipboard.writeText(code).then(() => {
-                    button.innerHTML = '<span class="material-symbols-outlined !text-[14px]">check</span> Copied!';
-                    button.classList.add('text-primary');
-                    setTimeout(() => {
-                        button.innerHTML = '<span class="material-symbols-outlined !text-[14px]">content_copy</span> Copy';
-                        button.classList.remove('text-primary');
-                    }, 2000);
-                });
+            const toast = document.createElement('div');
+            toast.id = 'toast-notification';
+            toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#44475a;color:white;padding:8px 16px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;font-weight:500;font-size:14px;animation:toastFadeIn 0.3s ease-out;';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(function() {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(function() { toast.remove(); }, 300);
+            }, 2000);
+        }
+
+        // ========== Page Info ==========
+        const pageUrl = window.location.pathname;
+        const pageTitle = '{{ page.title | escape }}';
+
+        // ========== Copy Code Button ==========
+        document.querySelectorAll('.highlight').forEach(function(block) {
+            const button = document.createElement('button');
+            button.style.cssText = 'position:absolute;top:8px;right:8px;padding:6px 12px;background:#44475a;color:#a0a0a0;font-size:12px;font-family:monospace;border-radius:4px;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;';
+            button.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;">content_copy</span> Copy';
+
+            button.addEventListener('click', function() {
+                const code = block.querySelector('code');
+                if (code) {
+                    navigator.clipboard.writeText(code.textContent).then(function() {
+                        button.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;">check</span> Copied!';
+                        button.style.color = '#bd93f9';
+                        setTimeout(function() {
+                            button.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;">content_copy</span> Copy';
+                            button.style.color = '#a0a0a0';
+                        }, 2000);
+                    });
+                }
             });
 
             block.style.position = 'relative';
             block.appendChild(button);
         });
 
-        // Share button
-        document.getElementById('share-btn')?.addEventListener('click', async function() {
-            const shareData = {
-                title: '{{ page.title | escape }}',
-                text: '{{ page.excerpt | strip_html | truncate: 100 | escape }}',
-                url: window.location.href
-            };
+        // ========== Share Button ==========
+        const shareBtn = document.getElementById('share-btn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', async function() {
+                const shareData = {
+                    title: pageTitle,
+                    text: pageTitle,
+                    url: window.location.href
+                };
 
-            if (navigator.share) {
-                try {
-                    await navigator.share(shareData);
-                } catch (err) {
-                    console.log('Share cancelled');
+                if (navigator.share) {
+                    try {
+                        await navigator.share(shareData);
+                    } catch (err) {
+                        console.log('Share cancelled');
+                    }
+                } else {
+                    try {
+                        await navigator.clipboard.writeText(window.location.href);
+                        showToast('링크가 클립보드에 복사되었습니다');
+                    } catch (err) {
+                        showToast('복사에 실패했습니다');
+                    }
                 }
-            } else {
-                // Fallback: copy to clipboard
-                await navigator.clipboard.writeText(window.location.href);
-                showToast('링크가 클립보드에 복사되었습니다');
-            }
-        });
-
-        // Font size adjustment
-        let fontSize = 1;
-        document.getElementById('font-size-btn')?.addEventListener('click', () => {
-            const article = document.querySelector('.prose');
-            fontSize = fontSize >= 1.2 ? 0.9 : fontSize + 0.1;
-            article.style.fontSize = fontSize + 'rem';
-        });
-
-        // Like button (simple toggle)
-        document.getElementById('like-btn')?.addEventListener('click', function () {
-            const icon = this.querySelector('.material-symbols-outlined');
-            const count = this.querySelector('.text-xs');
-
-            if (icon.style.fontVariationSettings === "'FILL' 1") {
-                icon.style.fontVariationSettings = "'FILL' 0";
-                this.classList.remove('text-accent');
-                this.classList.add('text-gray-300');
-            } else {
-                icon.style.fontVariationSettings = "'FILL' 1";
-                this.classList.remove('text-gray-300');
-                this.classList.add('text-accent');
-            }
-        });
-
-        // Bookmark button with localStorage
-        const bookmarkBtn = document.getElementById('bookmark-btn');
-        const pageUrl = window.location.pathname;
-        const pageTitle = '{{ page.title | escape }}';
-
-        // Check if already bookmarked
-        function isBookmarked() {
-            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-            return bookmarks.some(b => b.url === pageUrl);
+            });
         }
 
-        // Update bookmark button state
+        // ========== Font Size Adjustment ==========
+        let fontSize = 1;
+        const fontSizeBtn = document.getElementById('font-size-btn');
+        if (fontSizeBtn) {
+            fontSizeBtn.addEventListener('click', function() {
+                const article = document.querySelector('.prose');
+                if (article) {
+                    fontSize = fontSize >= 1.2 ? 0.9 : fontSize + 0.1;
+                    article.style.fontSize = fontSize + 'rem';
+                    showToast('글자 크기: ' + Math.round(fontSize * 100) + '%');
+                }
+            });
+        }
+
+        // ========== Like Button with localStorage ==========
+        const likeBtn = document.getElementById('like-btn');
+        const likeCountEl = likeBtn ? likeBtn.querySelector('.text-xs') : null;
+        const likeIcon = likeBtn ? likeBtn.querySelector('.material-symbols-outlined') : null;
+
+        function isLiked() {
+            const likes = JSON.parse(localStorage.getItem('likes') || '[]');
+            return likes.includes(pageUrl);
+        }
+
+        function getLikeCount() {
+            const counts = JSON.parse(localStorage.getItem('likeCounts') || '{}');
+            return counts[pageUrl] || 0;
+        }
+
+        function updateLikeBtn() {
+            if (!likeBtn || !likeCountEl || !likeIcon) return;
+
+            const count = getLikeCount();
+            likeCountEl.textContent = count;
+
+            if (isLiked()) {
+                likeIcon.style.fontVariationSettings = "'FILL' 1";
+                likeBtn.classList.remove('text-gray-300');
+                likeBtn.classList.add('text-accent');
+            } else {
+                likeIcon.style.fontVariationSettings = "'FILL' 0";
+                likeBtn.classList.remove('text-accent');
+                likeBtn.classList.add('text-gray-300');
+            }
+        }
+
+        updateLikeBtn();
+
+        if (likeBtn) {
+            likeBtn.addEventListener('click', function() {
+                let likes = JSON.parse(localStorage.getItem('likes') || '[]');
+                let counts = JSON.parse(localStorage.getItem('likeCounts') || '{}');
+
+                if (isLiked()) {
+                    likes = likes.filter(function(url) { return url !== pageUrl; });
+                    counts[pageUrl] = Math.max(0, (counts[pageUrl] || 1) - 1);
+                    showToast('좋아요를 취소했습니다');
+                } else {
+                    likes.push(pageUrl);
+                    counts[pageUrl] = (counts[pageUrl] || 0) + 1;
+                    showToast('좋아요를 눌렀습니다');
+                }
+
+                localStorage.setItem('likes', JSON.stringify(likes));
+                localStorage.setItem('likeCounts', JSON.stringify(counts));
+                updateLikeBtn();
+            });
+        }
+
+        // ========== Bookmark Button with localStorage ==========
+        const bookmarkBtn = document.getElementById('bookmark-btn');
+        const bookmarkIcon = bookmarkBtn ? bookmarkBtn.querySelector('.material-symbols-outlined') : null;
+
+        function isBookmarked() {
+            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            return bookmarks.some(function(b) { return b.url === pageUrl; });
+        }
+
         function updateBookmarkBtn() {
-            const icon = bookmarkBtn?.querySelector('.material-symbols-outlined');
-            if (!icon) return;
+            if (!bookmarkBtn || !bookmarkIcon) return;
 
             if (isBookmarked()) {
-                icon.style.fontVariationSettings = "'FILL' 1";
+                bookmarkIcon.style.fontVariationSettings = "'FILL' 1";
                 bookmarkBtn.classList.remove('text-gray-400');
                 bookmarkBtn.classList.add('text-accent');
             } else {
-                icon.style.fontVariationSettings = "'FILL' 0";
+                bookmarkIcon.style.fontVariationSettings = "'FILL' 0";
                 bookmarkBtn.classList.remove('text-accent');
                 bookmarkBtn.classList.add('text-gray-400');
             }
         }
 
-        // Initialize bookmark state
         updateBookmarkBtn();
 
-        bookmarkBtn?.addEventListener('click', function () {
-            let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        if (bookmarkBtn) {
+            bookmarkBtn.addEventListener('click', function() {
+                let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
 
-            if (isBookmarked()) {
-                // Remove bookmark
-                bookmarks = bookmarks.filter(b => b.url !== pageUrl);
-                showToast('북마크가 제거되었습니다');
-            } else {
-                // Add bookmark
-                bookmarks.push({
-                    url: pageUrl,
-                    title: pageTitle,
-                    date: new Date().toISOString()
-                });
-                showToast('북마크에 추가되었습니다');
-            }
+                if (isBookmarked()) {
+                    bookmarks = bookmarks.filter(function(b) { return b.url !== pageUrl; });
+                    showToast('북마크가 제거되었습니다');
+                } else {
+                    bookmarks.push({
+                        url: pageUrl,
+                        title: pageTitle,
+                        date: new Date().toISOString()
+                    });
+                    showToast('북마크에 추가되었습니다');
+                }
 
-            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-            updateBookmarkBtn();
-        });
-
-        // Toast notification function
-        function showToast(message) {
-            // Remove existing toast
-            const existingToast = document.getElementById('toast-notification');
-            if (existingToast) existingToast.remove();
-
-            // Create new toast
-            const toast = document.createElement('div');
-            toast.id = 'toast-notification';
-            toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-surface-dark text-white px-4 py-2 rounded-lg shadow-lg z-50 font-medium text-sm animate-fade-in';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-
-            // Auto-remove after 2 seconds
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.3s';
-                setTimeout(() => toast.remove(), 300);
-            }, 2000);
+                localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+                updateBookmarkBtn();
+            });
         }
+    });
     </script>
 
     <!-- Toast animation style -->
     <style>
-        @keyframes fadeIn {
+        @keyframes toastFadeIn {
             from { opacity: 0; transform: translate(-50%, -10px); }
             to { opacity: 1; transform: translate(-50%, 0); }
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out;
         }
     </style>
 
