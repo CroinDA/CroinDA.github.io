@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html class="dark" lang="{{ site.locale | replace: " _", "-" | default: "en" }}">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#bd93f9",
+                        "accent": "#ff79c6",
+                        "background-dark": "#282a36",
+                        "surface-dark": "#44475a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            .highlight {
+                @apply rounded-xl overflow-hidden my-8 bg-[#282a36] border border-[#44475a] text-[#f8f8f2] font-mono text-sm leading-relaxed relative;
+            }
+            .highlight pre { @apply p-4 overflow-x-auto; }
+            .highlight .k { color: #ff79c6; }
+            .highlight .n { color: #f8f8f2; }
+            .highlight .nf { color: #50fa7b; }
+            .highlight .s { color: #f1fa8c; }
+            .highlight .c1 { color: #6272a4; font-style: italic; }
+            .highlight .nc { color: #8be9fd; }
+            .highlight .o { color: #ff79c6; }
+            .highlight .nb { color: #8be9fd; }
+            .highlight .kt { color: #8be9fd; }
+            .highlight .mi { color: #bd93f9; }
+            .highlight .s1, .highlight .s2 { color: #f1fa8c; }
+            .highlight .kn, .highlight .kd { color: #ff79c6; }
+            .highlight .na { color: #50fa7b; }
+            .highlight .nt { color: #ff79c6; }
+
+            .code-header {
+                @apply flex items-center justify-between px-4 py-2 bg-[#191a21] border-b border-[#44475a] text-xs text-[#6272a4] font-mono;
+            }
+
+            .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+                @apply scroll-mt-24 font-bold tracking-tight text-white;
+            }
+            .prose h1 { @apply text-3xl mt-12 mb-6; }
+            .prose h2 { @apply text-2xl mt-10 mb-5; }
+            .prose h3 { @apply text-xl mt-8 mb-4; }
+            .prose h4 { @apply text-lg mt-6 mb-3; }
+
+            .prose p { @apply text-gray-300 leading-relaxed text-lg mb-6; }
+            .prose strong { @apply text-white font-semibold; }
+            .prose em { @apply text-gray-200 italic; }
+            .prose a { @apply text-primary no-underline hover:underline; }
+            .prose code { @apply bg-surface-dark px-1.5 py-0.5 rounded text-primary text-sm font-mono; }
+            .prose pre code { @apply bg-transparent p-0; }
+            .prose ul, .prose ol { @apply text-gray-300 my-6 space-y-2; }
+            .prose li { @apply ml-6; }
+            .prose blockquote { @apply border-l-4 border-primary bg-primary/5 p-6 rounded-r-xl my-8; }
+            .prose blockquote p { @apply italic text-gray-200 mb-0; }
+            .prose img { @apply rounded-xl my-8 border border-surface-dark; }
+            .prose table { @apply w-full my-8 border-collapse; }
+            .prose th { @apply bg-surface-dark text-white font-semibold p-3 border border-[#44475a]; }
+            .prose td { @apply p-3 border border-[#44475a] text-gray-300; }
+
+            .sticky-toc {
+                @apply bg-background-dark/95 backdrop-blur-md border border-surface-dark rounded-xl p-4 mb-8;
+            }
+        }
+
+        body {
+            background-color: #282a36;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="font-display antialiased text-gray-300">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#282a36]/90 backdrop-blur-xl border-b border-surface-dark">
+        <div class="flex items-center justify-between h-16 px-4 max-w-3xl mx-auto">
+            <a href="/posts/" class="flex items-center text-primary hover:text-accent transition-colors">
+                <span class="material-symbols-outlined !text-[24px]">chevron_left</span>
+                <span class="font-medium">Blog</span>
+            </a>
+            <div class="flex items-center gap-5">
+                <button id="bookmark-btn" class="text-gray-400 hover:text-accent transition-colors">
+                    <span class="material-symbols-outlined">bookmark</span>
+                </button>
+                <button id="share-btn" class="text-gray-400 hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">ios_share</span>
+                </button>
+            </div>
+        </div>
+        <!-- Reading progress bar -->
+        <div class="absolute bottom-0 left-0 h-[2px] bg-primary transition-all duration-300" id="reading-progress"
+            style="width: 0%;"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-5 pt-8 pb-32">
+        <header class="mb-10">
+            <!-- Tags/Categories -->
+            <div class="flex flex-wrap gap-2 mb-4">
+                {% if page.categories %}
+                {% for category in page.categories limit:2 %}
+                <span
+                    class="px-2.5 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-wider border border-primary/20">{{
+                    category }}</span>
+                {% endfor %}
+                {% endif %}
+                {% if page.tags %}
+                {% for tag in page.tags limit:2 %}
+                <span
+                    class="px-2.5 py-1 rounded-md bg-surface-dark/50 text-gray-400 text-[11px] font-bold uppercase tracking-wider border border-surface-dark">{{
+                    tag }}</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-3xl md:text-4xl font-bold text-white leading-[1.15] mb-6">
+                {{ page.title }}
+            </h1>
+
+            <!-- Author Info -->
+            <div class="flex items-center gap-3 py-6 border-y border-surface-dark">
+                {% if site.author.avatar %}
+                <div class="w-10 h-10 rounded-full bg-cover bg-center border border-surface-dark"
+                    style="background-image: url('{{ site.author.avatar | relative_url }}');"></div>
+                {% else %}
+                <div
+                    class="w-10 h-10 rounded-full bg-surface-dark flex items-center justify-center text-primary font-bold">
+                    {{ site.author.name | slice: 0 }}
+                </div>
+                {% endif %}
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-white">{{ page.author | default: site.author.name }}</p>
+                    <p class="text-[12px] text-gray-500">
+                        {{ page.date | date: "%b %d, %Y" }} ·
+                        {% assign words = page.content | number_of_words %}
+                        {% assign read_time = words | divided_by: 200 %}
+                        {% if read_time == 0 %}1{% else %}{{ read_time }}{% endif %} min read
+                    </p>
+                </div>
+                {% if site.author.links %}
+                {% assign github_link = site.author.links | where: "label", "GitHub" | first %}
+                {% if github_link %}
+                <a href="{{ github_link.url }}" target="_blank"
+                    class="px-4 py-1.5 rounded-full bg-primary text-background-dark font-bold text-xs hover:bg-accent transition-colors">Follow</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </header>
+
+        <div class="flex flex-col gap-8">
+            <!-- Table of Contents -->
+            {% if page.toc %}
+            <aside class="sticky-toc" id="toc-container">
+                <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">toc</span>
+                    Table of Contents
+                </h2>
+                <nav class="space-y-3" id="toc-nav">
+                    <!-- TOC will be generated by JavaScript -->
+                </nav>
+            </aside>
+            {% endif %}
+
+            <!-- Article Content -->
+            <article class="prose prose-invert prose-lg max-w-none">
+                {{ content }}
+            </article>
+
+            <!-- Previous/Next Navigation -->
+            <nav class="mt-16 pt-10 border-t border-surface-dark grid grid-cols-2 gap-4">
+                {% if page.previous %}
+                <a class="group block p-4 rounded-2xl bg-surface-dark/20 border border-surface-dark hover:border-primary transition-all"
+                    href="{{ page.previous.url | relative_url }}">
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Previous</p>
+                    <h4 class="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">{{
+                        page.previous.title }}</h4>
+                </a>
+                {% else %}
+                <div></div>
+                {% endif %}
+
+                {% if page.next %}
+                <a class="group block p-4 rounded-2xl bg-surface-dark/20 border border-surface-dark hover:border-primary transition-all text-right"
+                    href="{{ page.next.url | relative_url }}">
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Next</p>
+                    <h4 class="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-2">{{
+                        page.next.title }}</h4>
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+    </main>
+
+    <!-- Floating Action Bar -->
+    <div
+        class="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-[#191a21]/90 backdrop-blur-2xl px-2 py-2 rounded-full shadow-2xl border border-surface-dark/50 ring-1 ring-white/5">
+        <button id="like-btn"
+            class="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-primary transition-colors">
+            <span class="material-symbols-outlined !text-[20px]">thumb_up</span>
+            <span class="text-xs font-bold">{{ page.likes | default: "0" }}</span>
+        </button>
+        <div class="w-px h-4 bg-surface-dark"></div>
+        {% if page.comments %}
+        <a href="#comments"
+            class="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-primary transition-colors">
+            <span class="material-symbols-outlined !text-[20px]">chat_bubble</span>
+            <span class="text-xs font-bold">{{ page.comment_count | default: "0" }}</span>
+        </a>
+        {% else %}
+        <button class="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-primary transition-colors">
+            <span class="material-symbols-outlined !text-[20px]">chat_bubble</span>
+            <span class="text-xs font-bold">0</span>
+        </button>
+        {% endif %}
+        <div class="w-px h-4 bg-surface-dark"></div>
+        <button id="font-size-btn" class="p-2 text-primary hover:text-accent transition-colors">
+            <span class="material-symbols-outlined !text-[20px]">format_size</span>
+        </button>
+    </div>
+
+    <!-- Comments Section -->
+    {% if page.comments %}
+    <div id="comments" class="max-w-3xl mx-auto px-5 pb-16">
+        <div class="border-t border-surface-dark pt-8">
+            {% include comments.html %}
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        // Reading Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('reading-progress').style.width = scrolled + '%';
+        });
+    </script>
+
+    <!-- Table of Contents Script -->
+    {% if page.toc %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const article = document.querySelector('.prose');
+            const headings = article.querySelectorAll('h2, h3, h4');
+            const tocNav = document.getElementById('toc-nav');
+
+            if (headings.length > 0) {
+                headings.forEach((heading, index) => {
+                    // Add ID to heading if it doesn't have one
+                    if (!heading.id) {
+                        heading.id = 'heading-' + index;
+                    }
+
+                    const link = document.createElement('a');
+                    link.href = '#' + heading.id;
+                    link.className = 'block text-sm hover:text-primary transition-colors';
+                    link.textContent = (index + 1) + '. ' + heading.textContent;
+
+                    // Style based on heading level
+                    if (heading.tagName === 'H2') {
+                        link.className += ' text-gray-400 font-medium';
+                    } else if (heading.tagName === 'H3') {
+                        link.className += ' text-gray-500 ml-4';
+                    } else {
+                        link.className += ' text-gray-600 ml-8';
+                    }
+
+                    tocNav.appendChild(link);
+
+                    // Update active link on scroll
+                    window.addEventListener('scroll', () => {
+                        const rect = heading.getBoundingClientRect();
+                        if (rect.top >= 0 && rect.top <= 200) {
+                            document.querySelectorAll('#toc-nav a').forEach(l => {
+                                l.classList.remove('text-primary', 'font-medium');
+                                l.classList.add('text-gray-400');
+                            });
+                            link.classList.remove('text-gray-400');
+                            link.classList.add('text-primary', 'font-medium');
+                        }
+                    });
+                });
+            } else {
+                // Hide TOC if no headings
+                document.getElementById('toc-container').style.display = 'none';
+            }
+        });
+    </script>
+    {% endif %}
+
+    <script>
+        // Copy code button for code blocks
+        document.querySelectorAll('.highlight').forEach((block) => {
+            const button = document.createElement('button');
+            button.className = 'absolute top-2 right-2 px-3 py-1.5 bg-surface-dark hover:bg-surface-dark/80 text-gray-400 hover:text-white text-xs font-mono rounded transition-colors flex items-center gap-1';
+            button.innerHTML = '<span class="material-symbols-outlined !text-[14px]">content_copy</span> Copy';
+
+            button.addEventListener('click', () => {
+                const code = block.querySelector('code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.innerHTML = '<span class="material-symbols-outlined !text-[14px]">check</span> Copied!';
+                    button.classList.add('text-primary');
+                    setTimeout(() => {
+                        button.innerHTML = '<span class="material-symbols-outlined !text-[14px]">content_copy</span> Copy';
+                        button.classList.remove('text-primary');
+                    }, 2000);
+                });
+            });
+
+            block.style.position = 'relative';
+            block.appendChild(button);
+        });
+
+        // Share button
+        document.getElementById('share-btn')?.addEventListener('click', async () => {
+            const shareData = {
+                title: '{{ page.title | escape }}',
+                text: '{{ page.excerpt | strip_html | truncate: 100 | escape }}',
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.log('Share cancelled');
+                }
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+            }
+        });
+
+        // Font size adjustment
+        let fontSize = 1;
+        document.getElementById('font-size-btn')?.addEventListener('click', () => {
+            const article = document.querySelector('.prose');
+            fontSize = fontSize >= 1.2 ? 0.9 : fontSize + 0.1;
+            article.style.fontSize = fontSize + 'rem';
+        });
+
+        // Like button (simple toggle)
+        document.getElementById('like-btn')?.addEventListener('click', function () {
+            const icon = this.querySelector('.material-symbols-outlined');
+            const count = this.querySelector('.text-xs');
+
+            if (icon.style.fontVariationSettings === "'FILL' 1") {
+                icon.style.fontVariationSettings = "'FILL' 0";
+                this.classList.remove('text-accent');
+                this.classList.add('text-gray-300');
+            } else {
+                icon.style.fontVariationSettings = "'FILL' 1";
+                this.classList.remove('text-gray-300');
+                this.classList.add('text-accent');
+            }
+        });
+
+        // Bookmark button
+        document.getElementById('bookmark-btn')?.addEventListener('click', function () {
+            const icon = this.querySelector('.material-symbols-outlined');
+
+            if (icon.style.fontVariationSettings === "'FILL' 1") {
+                icon.style.fontVariationSettings = "'FILL' 0";
+                this.classList.remove('text-accent');
+                this.classList.add('text-gray-400');
+            } else {
+                icon.style.fontVariationSettings = "'FILL' 1";
+                this.classList.remove('text-gray-400');
+                this.classList.add('text-accent');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -344,24 +344,24 @@ defaults:
       sidebar:
         nav: "docs"    # navigation.yml의 docs 메뉴를 사이드바에 표시
   
-  # _posts (기존 설정 유지)
+  # _posts (새로운 tech-post 레이아웃 적용)
   - scope:
       path: ""
       type: posts
     values:
-      layout: single
-      author_profile: true
-      read_time: false  # 작성 시간 나타내는 파라미터
+      layout: tech-post  # 새로운 디자인 레이아웃
+      author_profile: false  # tech-post 레이아웃에 자체 author info 포함
+      read_time: false
       comments: true
-      share: true
-      related: true
-      show_date: true
-      toc: true
-      toc_sticky: true    # toc 사이드바 고정
-      toc_label: 목차     # toc 목차 라벨 문구 수정
+      share: false  # tech-post 레이아웃에 자체 공유 버튼 포함
+      related: false  # tech-post 레이아웃에 prev/next 네비게이션 포함
+      show_date: false  # tech-post 레이아웃에 날짜 표시 포함
+      toc: true  # 자동 목차 생성
+      toc_sticky: false  # tech-post 스타일에 맞게 조정
+      toc_label: 목차
       toc_icon: "fa-solid fa-play"
       sidebar:
-        nav: "docs"   # posts에도 동일하게 적용
+        nav: "docs"
 
 date_format: "%Y-%m-%d"
 
