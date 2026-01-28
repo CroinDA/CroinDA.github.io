@@ -96,13 +96,13 @@
 <span class="material-symbols-outlined text-xs">folder_open</span>
                 _categories
             </h3>
-<div class="flex flex-wrap gap-2">
-<a href="/posts/" class="px-3 py-1.5 {% if page.url == '/posts/' %}bg-primary/10 text-primary border-primary/20{% else %}bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 border-transparent{% endif %} rounded-full text-xs font-semibold border hover:border-primary/20 transition-colors">
+<div class="flex overflow-x-auto gap-2 no-scrollbar pb-2">
+<a href="/posts/" class="px-3 py-1.5 {% if page.url == '/posts/' %}bg-primary/10 text-primary border-primary/20{% else %}bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 border-transparent{% endif %} rounded-full text-xs font-semibold border hover:border-primary/20 transition-colors whitespace-nowrap">
                     All ({{ site.posts.size }})
                 </a>
 {% assign sorted_categories = site.categories | sort %}
-{% for category in sorted_categories limit:5 %}
-<a href="{{ site.baseurl }}/categories/{{ category[0] | slugify }}/" class="px-3 py-1.5 bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 rounded-full text-xs border border-transparent hover:border-primary/20 transition-colors">
+{% for category in sorted_categories %}
+<a href="{{ site.baseurl }}/categories/{{ category[0] | slugify }}/" class="px-3 py-1.5 bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 rounded-full text-xs border border-transparent hover:border-primary/20 transition-colors whitespace-nowrap">
                     {{ category[0] }} ({{ category[1].size }})
                 </a>
 {% endfor %}
@@ -114,10 +114,10 @@
 <span class="material-symbols-outlined text-xs">sell</span>
                 _tags
             </h3>
-<div class="flex flex-wrap gap-2">
+<div class="flex overflow-x-auto gap-2 no-scrollbar pb-2">
 {% assign sorted_tags = site.tags | sort %}
-{% for tag in sorted_tags limit:10 %}
-<a href="{{ site.baseurl }}/tags/{{ tag[0] | slugify }}/" class="tag-pill bg-slate-50 dark:bg-surface-dark border-slate-200 dark:border-slate-800 text-slate-500 hover:border-primary/50 hover:text-primary">
+{% for tag in sorted_tags %}
+<a href="{{ site.baseurl }}/tags/{{ tag[0] | slugify }}/" class="px-3 py-1.5 bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 rounded-full text-xs border border-transparent hover:border-primary/20 transition-colors whitespace-nowrap">
                     {{ tag[0] }}({{ tag[1].size }})
                 </a>
 {% endfor %}
