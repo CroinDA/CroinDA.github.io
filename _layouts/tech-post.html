@@ -111,7 +111,7 @@
         <div class="flex items-center justify-between h-16 px-4 max-w-3xl mx-auto">
             <a href="/posts/" class="flex items-center text-primary hover:text-accent transition-colors">
                 <span class="material-symbols-outlined !text-[24px]">chevron_left</span>
-                <span class="font-medium">Blog</span>
+                <span class="font-medium">Feed</span>
             </a>
             <div class="flex items-center gap-5">
                 <button id="bookmark-btn" class="text-gray-400 hover:text-accent transition-colors">
@@ -258,7 +258,12 @@
     {% if page.comments %}
     <div id="comments" class="max-w-3xl mx-auto px-5 pb-16">
         <div class="border-t border-surface-dark pt-8">
+            <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined">chat_bubble</span>
+                댓글남기기
+            </h3>
             {% include comments.html %}
+            {% include comments-providers/disqus.html %}
         </div>
     </div>
     {% endif %}
@@ -349,7 +354,7 @@
         });
 
         // Share button
-        document.getElementById('share-btn')?.addEventListener('click', async () => {
+        document.getElementById('share-btn')?.addEventListener('click', async function() {
             const shareData = {
                 title: '{{ page.title | escape }}',
                 text: '{{ page.excerpt | strip_html | truncate: 100 | escape }}',
@@ -364,8 +369,8 @@
                 }
             } else {
                 // Fallback: copy to clipboard
-                navigator.clipboard.writeText(window.location.href);
-                alert('Link copied to clipboard!');
+                await navigator.clipboard.writeText(window.location.href);
+                showToast('링크가 클립보드에 복사되었습니다');
             }
         });
 
@@ -393,21 +398,89 @@
             }
         });
 
-        // Bookmark button
-        document.getElementById('bookmark-btn')?.addEventListener('click', function () {
-            const icon = this.querySelector('.material-symbols-outlined');
+        // Bookmark button with localStorage
+        const bookmarkBtn = document.getElementById('bookmark-btn');
+        const pageUrl = window.location.pathname;
+        const pageTitle = '{{ page.title | escape }}';
 
-            if (icon.style.fontVariationSettings === "'FILL' 1") {
-                icon.style.fontVariationSettings = "'FILL' 0";
-                this.classList.remove('text-accent');
-                this.classList.add('text-gray-400');
-            } else {
+        // Check if already bookmarked
+        function isBookmarked() {
+            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            return bookmarks.some(b => b.url === pageUrl);
+        }
+
+        // Update bookmark button state
+        function updateBookmarkBtn() {
+            const icon = bookmarkBtn?.querySelector('.material-symbols-outlined');
+            if (!icon) return;
+
+            if (isBookmarked()) {
                 icon.style.fontVariationSettings = "'FILL' 1";
-                this.classList.remove('text-gray-400');
-                this.classList.add('text-accent');
+                bookmarkBtn.classList.remove('text-gray-400');
+                bookmarkBtn.classList.add('text-accent');
+            } else {
+                icon.style.fontVariationSettings = "'FILL' 0";
+                bookmarkBtn.classList.remove('text-accent');
+                bookmarkBtn.classList.add('text-gray-400');
             }
+        }
+
+        // Initialize bookmark state
+        updateBookmarkBtn();
+
+        bookmarkBtn?.addEventListener('click', function () {
+            let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+
+            if (isBookmarked()) {
+                // Remove bookmark
+                bookmarks = bookmarks.filter(b => b.url !== pageUrl);
+                showToast('북마크가 제거되었습니다');
+            } else {
+                // Add bookmark
+                bookmarks.push({
+                    url: pageUrl,
+                    title: pageTitle,
+                    date: new Date().toISOString()
+                });
+                showToast('북마크에 추가되었습니다');
+            }
+
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkBtn();
         });
+
+        // Toast notification function
+        function showToast(message) {
+            // Remove existing toast
+            const existingToast = document.getElementById('toast-notification');
+            if (existingToast) existingToast.remove();
+
+            // Create new toast
+            const toast = document.createElement('div');
+            toast.id = 'toast-notification';
+            toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-surface-dark text-white px-4 py-2 rounded-lg shadow-lg z-50 font-medium text-sm animate-fade-in';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            // Auto-remove after 2 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
     </script>
+
+    <!-- Toast animation style -->
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
 
 </body>
 
