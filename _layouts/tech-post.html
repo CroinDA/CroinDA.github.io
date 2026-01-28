@@ -133,14 +133,14 @@
             <!-- Tags/Categories -->
             <div class="flex flex-wrap gap-2 mb-4">
                 {% if page.categories %}
-                {% for category in page.categories limit:2 %}
+                {% for category in page.categories %}
                 <span
                     class="px-2.5 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-wider border border-primary/20">{{
                     category }}</span>
                 {% endfor %}
                 {% endif %}
                 {% if page.tags %}
-                {% for tag in page.tags limit:2 %}
+                {% for tag in page.tags %}
                 <span
                     class="px-2.5 py-1 rounded-md bg-surface-dark/50 text-gray-400 text-[11px] font-bold uppercase tracking-wider border border-surface-dark">{{
                     tag }}</span>
