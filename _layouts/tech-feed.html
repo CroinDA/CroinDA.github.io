@@ -91,7 +91,7 @@
 </header>
 
 <main class="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-[320px_1fr] gap-0">
-<aside class="px-4 py-4 space-y-6 border-b border-slate-200 dark:border-border-dark md:border-b-0 md:border-r md:max-h-screen md:overflow-y-auto md:sticky md:top-14">
+<aside class="px-4 py-4 space-y-6 border-b border-slate-200 dark:border-border-dark md:border-b-0 md:max-h-screen md:overflow-y-auto md:sticky md:top-14">
 <div>
 <h3 class="font-mono text-[11px] uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
 <span class="material-symbols-outlined text-xs">folder_open</span>
@@ -127,9 +127,9 @@
 
 <!-- Author Profile -->
 <div class="pt-6 border-t border-slate-200 dark:border-border-dark">
-<div class="grid grid-cols-[auto_1fr] gap-4 items-start">
-<!-- Left: Profile Info -->
-<div class="flex flex-col items-center text-center">
+<div class="flex flex-col items-center">
+<!-- Profile Info -->
+<div class="flex flex-col items-center text-center mb-4">
 {% if site.author.avatar %}
 <img src="{{ site.author.avatar | relative_url }}" alt="{{ site.author.name }}" class="w-24 h-24 rounded-full mb-3 border-2 border-slate-200 dark:border-border-dark"/>
 {% endif %}
@@ -145,9 +145,9 @@
 {% endif %}
 </div>
 
-<!-- Right: Social Links -->
+<!-- Social Links in Row -->
 {% if site.author.links %}
-<div class="flex flex-col gap-1.5 justify-center">
+<div class="flex flex-row gap-3 justify-center flex-wrap">
 {% for link in site.author.links %}
 {% assign icon_class = "" %}
 {% if link.label == "Email" %}
@@ -163,9 +163,8 @@
 {% else %}
   {% assign icon_class = "fa-solid fa-link" %}
 {% endif %}
-<a href="{{ link.url }}" class="flex items-center gap-2 px-2 py-1.5 rounded text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-surface-dark hover:text-primary transition-colors" target="_blank" rel="noopener">
-<i class="{{ icon_class }} text-base"></i>
-<span class="text-xs">{{ link.label }}</span>
+<a href="{{ link.url }}" class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" target="_blank" rel="noopener" title="{{ link.label }}">
+<i class="{{ icon_class }} text-lg"></i>
 </a>
 {% endfor %}
 </div>
