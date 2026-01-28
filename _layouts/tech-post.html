@@ -474,49 +474,25 @@
             });
         }
 
-        // ========== Bookmark Button with localStorage ==========
+        // ========== Bookmark Button (Browser Native) ==========
         const bookmarkBtn = document.getElementById('bookmark-btn');
-        const bookmarkIcon = bookmarkBtn ? bookmarkBtn.querySelector('.material-symbols-outlined') : null;
-
-        function isBookmarked() {
-            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-            return bookmarks.some(function(b) { return b.url === pageUrl; });
-        }
-
-        function updateBookmarkBtn() {
-            if (!bookmarkBtn || !bookmarkIcon) return;
-
-            if (isBookmarked()) {
-                bookmarkIcon.style.fontVariationSettings = "'FILL' 1";
-                bookmarkBtn.classList.remove('text-gray-400');
-                bookmarkBtn.classList.add('text-accent');
-            } else {
-                bookmarkIcon.style.fontVariationSettings = "'FILL' 0";
-                bookmarkBtn.classList.remove('text-accent');
-                bookmarkBtn.classList.add('text-gray-400');
-            }
-        }
-
-        updateBookmarkBtn();
 
         if (bookmarkBtn) {
             bookmarkBtn.addEventListener('click', function() {
-                let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+                const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                const shortcutKey = isMac ? 'Cmd+D' : 'Ctrl+D';
 
-                if (isBookmarked()) {
-                    bookmarks = bookmarks.filter(function(b) { return b.url !== pageUrl; });
-                    showToast('북마크가 제거되었습니다');
-                } else {
-                    bookmarks.push({
-                        url: pageUrl,
-                        title: pageTitle,
-                        date: new Date().toISOString()
-                    });
-                    showToast('북마크에 추가되었습니다');
+                showToast(shortcutKey + ' 키를 눌러 브라우저 북마크에 추가하세요');
+
+                // Try to trigger bookmark (won't work in most browsers due to security)
+                // This is just a fallback attempt
+                if (window.sidebar && window.sidebar.addPanel) {
+                    // Firefox
+                    window.sidebar.addPanel(pageTitle, window.location.href, '');
+                } else if (window.external && ('AddFavorite' in window.external)) {
+                    // IE
+                    window.external.AddFavorite(window.location.href, pageTitle);
                 }
-
-                localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-                updateBookmarkBtn();
             });
         }
     });
