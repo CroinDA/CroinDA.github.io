@@ -7,6 +7,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -126,7 +127,9 @@
 
 <!-- Author Profile -->
 <div class="pt-6 border-t border-slate-200 dark:border-border-dark">
-<div class="flex flex-col items-center text-center mb-4">
+<div class="grid grid-cols-[auto_1fr] gap-4 items-start">
+<!-- Left: Profile Info -->
+<div class="flex flex-col items-center text-center">
 {% if site.author.avatar %}
 <img src="{{ site.author.avatar | relative_url }}" alt="{{ site.author.name }}" class="w-24 h-24 rounded-full mb-3 border-2 border-slate-200 dark:border-border-dark"/>
 {% endif %}
@@ -142,17 +145,32 @@
 {% endif %}
 </div>
 
-<!-- Social Links -->
+<!-- Right: Social Links -->
 {% if site.author.links %}
-<div class="flex flex-col gap-1.5 text-sm">
+<div class="flex flex-col gap-1.5 justify-center">
 {% for link in site.author.links %}
+{% assign icon_class = "" %}
+{% if link.label == "Email" %}
+  {% assign icon_class = "fa-solid fa-envelope" %}
+{% elsif link.label == "GitHub" %}
+  {% assign icon_class = "fa-brands fa-github" %}
+{% elsif link.label == "LinkedIn" %}
+  {% assign icon_class = "fa-brands fa-linkedin" %}
+{% elsif link.label == "Instagram" %}
+  {% assign icon_class = "fa-brands fa-instagram" %}
+{% elsif link.label == "YouTube" %}
+  {% assign icon_class = "fa-brands fa-youtube" %}
+{% else %}
+  {% assign icon_class = "fa-solid fa-link" %}
+{% endif %}
 <a href="{{ link.url }}" class="flex items-center gap-2 px-2 py-1.5 rounded text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-surface-dark hover:text-primary transition-colors" target="_blank" rel="noopener">
-<span class="material-symbols-outlined text-base">link</span>
+<i class="{{ icon_class }} text-base"></i>
 <span class="text-xs">{{ link.label }}</span>
 </a>
 {% endfor %}
 </div>
 {% endif %}
+</div>
 </div>
 
 <!-- Navigation Docs -->
