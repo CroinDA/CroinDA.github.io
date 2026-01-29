@@ -5,6 +5,63 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>{{ page.title }} - {{ site.title }}</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
+    <meta name="keywords" content="{% if page.tags %}{{ page.tags | join: ', ' }}{% endif %}{% if page.categories %}, {{ page.categories | join: ', ' }}{% endif %}" />
+    <meta name="author" content="{{ site.author.name }}" />
+    <link rel="canonical" href="{{ page.url | absolute_url }}" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{ page.title }}" />
+    <meta property="og:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
+    <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:site_name" content="{{ site.title }}" />
+    <meta property="og:locale" content="{{ site.locale | default: 'ko_KR' }}" />
+    {% if page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}" />{% endif %}
+    {% if page.last_modified_at %}<meta property="article:modified_time" content="{{ page.last_modified_at | date_to_xmlschema }}" />{% endif %}
+    {% if page.categories %}{% for category in page.categories %}<meta property="article:section" content="{{ category }}" />{% endfor %}{% endif %}
+    {% if page.tags %}{% for tag in page.tags %}<meta property="article:tag" content="{{ tag }}" />{% endfor %}{% endif %}
+    {% if page.image %}<meta property="og:image" content="{{ page.image | absolute_url }}" />{% elsif site.og_image %}<meta property="og:image" content="{{ site.og_image | absolute_url }}" />{% endif %}
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ page.title }}" />
+    <meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
+    {% if page.image %}<meta name="twitter:image" content="{{ page.image | absolute_url }}" />{% elsif site.og_image %}<meta name="twitter:image" content="{{ site.og_image | absolute_url }}" />{% endif %}
+    {% if site.twitter.username %}<meta name="twitter:site" content="@{{ site.twitter.username }}" />{% endif %}
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "{{ page.title }}",
+      "description": "{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ site.author.name }}",
+        "url": "{{ site.url }}"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "{{ site.title }}",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ site.logo | absolute_url }}"
+        }
+      },
+      "datePublished": "{% if page.date %}{{ page.date | date_to_xmlschema }}{% endif %}",
+      "dateModified": "{% if page.last_modified_at %}{{ page.last_modified_at | date_to_xmlschema }}{% else %}{{ page.date | date_to_xmlschema }}{% endif %}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ page.url | absolute_url }}"
+      }{% if page.image or site.og_image %},
+      "image": "{% if page.image %}{{ page.image | absolute_url }}{% else %}{{ site.og_image | absolute_url }}{% endif %}"{% endif %}
+    }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap"

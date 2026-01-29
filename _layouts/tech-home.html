@@ -4,6 +4,53 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{{ site.title }} - {{ site.description }}</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="{{ site.description }}" />
+<meta name="keywords" content="AI, Machine Learning, Deep Learning, NLP, Computer Vision, RecSys, 머신러닝, 딥러닝, PyTorch, 인공지능" />
+<meta name="author" content="{{ site.author.name }}" />
+<link rel="canonical" href="{{ site.url }}" />
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ site.title }}" />
+<meta property="og:description" content="{{ site.description }}" />
+<meta property="og:url" content="{{ site.url }}" />
+<meta property="og:site_name" content="{{ site.title }}" />
+<meta property="og:locale" content="{{ site.locale | default: 'ko_KR' }}" />
+{% if site.og_image %}<meta property="og:image" content="{{ site.og_image | absolute_url }}" />{% endif %}
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ site.title }}" />
+<meta name="twitter:description" content="{{ site.description }}" />
+{% if site.og_image %}<meta name="twitter:image" content="{{ site.og_image | absolute_url }}" />{% endif %}
+{% if site.twitter.username %}<meta name="twitter:site" content="@{{ site.twitter.username }}" />{% endif %}
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.title }}",
+  "description": "{{ site.description }}",
+  "url": "{{ site.url }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ site.author.name }}",
+    "url": "{{ site.url }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site.title }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site.logo | absolute_url }}"
+    }
+  }
+}
+</script>
+
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
