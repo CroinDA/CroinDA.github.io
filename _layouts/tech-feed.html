@@ -139,7 +139,7 @@
 </header>
 
 <main class="max-w-screen-xl mx-auto">
-<!-- Categories and Tags Section -->
+<!-- Categories and Tags Section (Full Width) -->
 <div class="px-4 py-6 space-y-6 border-b border-slate-200 dark:border-border-dark">
 <div>
 <h3 class="font-mono text-[11px] uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
@@ -174,6 +174,73 @@
 </div>
 </div>
 </div>
+
+<!-- Grid Layout: Sidebar + Posts -->
+<div class="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-0">
+<!-- Sidebar -->
+<aside class="px-4 py-4 space-y-6 border-b border-slate-200 dark:border-border-dark md:border-b-0 md:border-r md:max-h-screen md:overflow-y-auto md:sticky md:top-14">
+<!-- Author Profile -->
+<div class="flex flex-col items-center text-center">
+{% if site.author.avatar %}
+<img src="{{ site.author.avatar | relative_url }}" alt="{{ site.author.name }}" class="w-24 h-24 rounded-full mb-3 border-2 border-slate-200 dark:border-border-dark"/>
+{% endif %}
+<h3 class="text-base font-bold dark:text-white mb-1">{{ site.author.name }}</h3>
+{% if site.author.bio %}
+<p class="text-sm text-slate-600 dark:text-slate-400 mb-2">{{ site.author.bio }}</p>
+{% endif %}
+{% if site.author.location %}
+<p class="text-xs text-slate-500 dark:text-slate-500 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">location_on</span>
+{{ site.author.location }}
+</p>
+{% endif %}
+</div>
+
+<!-- Social Links -->
+{% if site.author.links %}
+<div class="flex flex-row gap-3 justify-center flex-wrap">
+{% for link in site.author.links %}
+{% assign icon_class = "" %}
+{% if link.label == "Email" %}
+  {% assign icon_class = "fa-solid fa-envelope" %}
+{% elsif link.label == "GitHub" %}
+  {% assign icon_class = "fa-brands fa-github" %}
+{% elsif link.label == "LinkedIn" %}
+  {% assign icon_class = "fa-brands fa-linkedin" %}
+{% elsif link.label == "Instagram" %}
+  {% assign icon_class = "fa-brands fa-instagram" %}
+{% elsif link.label == "YouTube" %}
+  {% assign icon_class = "fa-brands fa-youtube" %}
+{% else %}
+  {% assign icon_class = "fa-solid fa-link" %}
+{% endif %}
+<a href="{{ link.url }}" class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" target="_blank" rel="noopener" title="{{ link.label }}">
+<i class="{{ icon_class }} text-lg"></i>
+</a>
+{% endfor %}
+</div>
+{% endif %}
+
+<!-- Navigation Docs -->
+{% if site.data.navigation.docs %}
+{% for section in site.data.navigation.docs %}
+<div class="pt-4 border-t border-slate-200 dark:border-border-dark">
+<h3 class="text-xs font-bold dark:text-white mb-2 uppercase tracking-wider">{{ section.title }}</h3>
+{% if section.children %}
+<ul class="space-y-1 text-xs">
+{% for child in section.children %}
+<li>
+<a href="{{ child.url | relative_url }}" class="block px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-surface-dark hover:text-primary transition-colors">
+{{ child.title }}
+</a>
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+</div>
+{% endfor %}
+{% endif %}
+</aside>
 
 <!-- Posts Section -->
 <div class="divide-y divide-slate-200 dark:divide-border-dark">
@@ -231,6 +298,7 @@
 </a>
 </article>
 {% endfor %}
+</div>
 </div>
 </main>
 
