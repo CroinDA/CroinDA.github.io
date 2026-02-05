@@ -1,7 +1,7 @@
 ---
 title: "Tag"
-layout: tags
+layout: tech-feed
 permalink: /tags/
-author_profile: true
-sidebar_main: true
+author_profile: false
+sidebar_main: false
 ---

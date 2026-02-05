@@ -1,7 +1,7 @@
 ---
 title: "Category"
-layout: categories
+layout: tech-feed
 permalink: /categories/
-author_profile: true
-sidebar_main: true
+author_profile: false
+sidebar_main: false
 ---
