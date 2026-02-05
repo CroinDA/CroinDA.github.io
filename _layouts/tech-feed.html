@@ -341,24 +341,14 @@
 
 <!-- Floating Action Bar -->
 <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-card-dark/90 dark:bg-card-dark/90 backdrop-blur-2xl px-2 py-2 rounded-full shadow-2xl border border-surface-dark/50 ring-1 ring-white/5 z-50">
-<a href="/posts/" class="flex items-center gap-2 px-4 py-2 {% if page.url contains '/posts' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
-<span class="material-symbols-outlined !text-[20px]" style="font-variation-settings: 'FILL' {% if page.url contains '/posts' %}1{% else %}0{% endif %};">dynamic_feed</span>
-<span class="text-xs font-bold uppercase">Feed</span>
-</a>
-<div class="w-px h-4 bg-surface-dark"></div>
-<a href="/categories/" class="flex items-center gap-2 px-4 py-2 {% if page.url contains '/categories' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
-<span class="material-symbols-outlined !text-[20px]">folder</span>
-<span class="text-xs font-bold uppercase">Category</span>
-</a>
-<div class="w-px h-4 bg-surface-dark"></div>
-<a href="/tags/" class="flex items-center gap-2 px-4 py-2 {% if page.url contains '/tags' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
-<span class="material-symbols-outlined !text-[20px]">sell</span>
-<span class="text-xs font-bold uppercase">Tag</span>
-</a>
-<div class="w-px h-4 bg-surface-dark"></div>
 <a href="/" class="flex items-center gap-2 px-4 py-2 {% if page.url == '/' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
 <span class="material-symbols-outlined !text-[20px]">home</span>
 <span class="text-xs font-bold uppercase">Home</span>
+</a>
+<div class="w-px h-4 bg-surface-dark"></div>
+<a href="/posts/" class="flex items-center gap-2 px-4 py-2 {% if page.url contains '/posts' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
+<span class="material-symbols-outlined !text-[20px]" style="font-variation-settings: 'FILL' {% if page.url contains '/posts' %}1{% else %}0{% endif %};">dynamic_feed</span>
+<span class="text-xs font-bold uppercase">Feed</span>
 </a>
 </nav>
 
