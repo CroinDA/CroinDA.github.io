@@ -69,10 +69,13 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#00f2ff",
+                        "primary": "#00c9db",
+                        "primary-bright": "#00f2ff",
                         "accent": "#7000ff",
-                        "background-dark": "#050505",
-                        "card-dark": "#0d0d0d",
+                        "background-dark": "#0a0a0c",
+                        "card-dark": "#121214",
+                        "surface-dark": "#1a1a1c",
+                        "border-dark": "#2a2a2c",
                     },
                     fontFamily: {
                         "display": ["Inter", "sans-serif"],
@@ -90,12 +93,12 @@
                 background-size: 40px 40px;
             }
             .neon-border {
-                border: 1px solid rgba(0, 242, 255, 0.3);
-                box-shadow: 0 0 10px rgba(0, 242, 255, 0.1);
+                border: 1px solid rgba(0, 201, 219, 0.3);
+                box-shadow: 0 0 10px rgba(0, 201, 219, 0.1);
             }
             .neon-border:hover {
-                border-color: #00f2ff;
-                box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+                border-color: #00c9db;
+                box-shadow: 0 0 15px rgba(0, 201, 219, 0.3);
             }
         }
     </style>
@@ -133,7 +136,7 @@
 <!-- Hero Section -->
 <section class="px-6 pt-10 pb-8 border-b border-white/5">
 <div class="font-mono text-[10px] text-primary mb-3 flex items-center gap-2">
-<span class="size-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="size-1.5 rounded-full bg-primary-bright animate-pulse"></span>
                 STABLE_BUILD_V2.4
             </div>
 <h2 class="text-white text-2xl font-bold leading-tight mb-4 font-mono">
@@ -193,7 +196,7 @@
 <p class="text-slate-400 text-sm mb-4 line-clamp-2">{{ post.excerpt | strip_html | truncate: 100 }}</p>
 <div class="flex items-center justify-between">
 <span class="text-[10px] font-mono text-slate-500 italic">{{ post.date | date: "%Y-%m-%d" }}</span>
-<button class="text-xs font-mono text-primary flex items-center gap-1">
+<button class="text-xs font-mono text-primary-bright flex items-center gap-1">
                                     READ_MORE <span class="material-symbols-outlined text-xs">arrow_forward</span>
 </button>
 </div>
@@ -239,23 +242,26 @@
 </div>
 </main>
 
-<!-- Bottom Navigation -->
-<nav class="fixed bottom-0 left-0 right-0 bg-background-dark/80 backdrop-blur-xl border-t border-white/10 px-8 py-3 flex justify-between items-center pb-8 z-50">
-<a href="/" class="flex flex-col items-center gap-1 text-primary">
-<span class="material-symbols-outlined fill-1">home</span>
-<span class="text-[9px] font-mono font-bold uppercase">Root</span>
+<!-- Floating Action Bar -->
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-card-dark/90 backdrop-blur-2xl px-2 py-2 rounded-full shadow-2xl border border-surface-dark/50 ring-1 ring-white/5 z-50">
+<a href="/" class="flex items-center gap-2 px-4 py-2 text-primary transition-colors">
+<span class="material-symbols-outlined !text-[20px] fill-1">home</span>
+<span class="text-xs font-bold uppercase">Root</span>
 </a>
-<a href="/posts/" class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary transition-colors">
-<span class="material-symbols-outlined">folder</span>
-<span class="text-[9px] font-mono uppercase">Posts</span>
+<div class="w-px h-4 bg-surface-dark"></div>
+<a href="/posts/" class="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-[20px]">folder</span>
+<span class="text-xs font-bold uppercase">Posts</span>
 </a>
-<a href="/tags/" class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary transition-colors">
-<span class="material-symbols-outlined">tag</span>
-<span class="text-[9px] font-mono uppercase">Tags</span>
+<div class="w-px h-4 bg-surface-dark"></div>
+<a href="/tags/" class="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-[20px]">tag</span>
+<span class="text-xs font-bold uppercase">Tags</span>
 </a>
-<a href="/categories/" class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary transition-colors">
-<span class="material-symbols-outlined">settings</span>
-<span class="text-[9px] font-mono uppercase">Categories</span>
+<div class="w-px h-4 bg-surface-dark"></div>
+<a href="/categories/" class="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-[20px]">settings</span>
+<span class="text-xs font-bold uppercase">Categories</span>
 </a>
 </nav>
 

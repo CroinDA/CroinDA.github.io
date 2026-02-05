@@ -85,10 +85,13 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#bd93f9",
-                        "accent": "#ff79c6",
-                        "background-dark": "#282a36",
-                        "surface-dark": "#44475a",
+                        "primary": "#00c9db",
+                        "primary-bright": "#00f2ff",
+                        "accent": "#7000ff",
+                        "background-dark": "#0a0a0c",
+                        "card-dark": "#121214",
+                        "surface-dark": "#1a1a1c",
+                        "border-dark": "#2a2a2c",
                     },
                     fontFamily: {
                         "display": ["Inter", "sans-serif"],
@@ -101,26 +104,26 @@
     <style type="text/tailwindcss">
         @layer base {
             .highlight {
-                @apply rounded-xl overflow-hidden my-8 bg-[#282a36] border border-[#44475a] text-[#f8f8f2] font-mono text-sm leading-relaxed relative;
+                @apply rounded-xl overflow-hidden my-8 bg-card-dark border border-surface-dark text-[#f8f8f2] font-mono text-sm leading-relaxed relative;
             }
             .highlight pre { @apply p-4 overflow-x-auto; }
-            .highlight .k { color: #ff79c6; }
+            .highlight .k { color: #00c9db; }
             .highlight .n { color: #f8f8f2; }
             .highlight .nf { color: #50fa7b; }
             .highlight .s { color: #f1fa8c; }
             .highlight .c1 { color: #6272a4; font-style: italic; }
-            .highlight .nc { color: #8be9fd; }
-            .highlight .o { color: #ff79c6; }
-            .highlight .nb { color: #8be9fd; }
-            .highlight .kt { color: #8be9fd; }
-            .highlight .mi { color: #bd93f9; }
+            .highlight .nc { color: #00f2ff; }
+            .highlight .o { color: #00c9db; }
+            .highlight .nb { color: #00f2ff; }
+            .highlight .kt { color: #00f2ff; }
+            .highlight .mi { color: #7000ff; }
             .highlight .s1, .highlight .s2 { color: #f1fa8c; }
-            .highlight .kn, .highlight .kd { color: #ff79c6; }
+            .highlight .kn, .highlight .kd { color: #00c9db; }
             .highlight .na { color: #50fa7b; }
-            .highlight .nt { color: #ff79c6; }
+            .highlight .nt { color: #00c9db; }
 
             .code-header {
-                @apply flex items-center justify-between px-4 py-2 bg-[#191a21] border-b border-[#44475a] text-xs text-[#6272a4] font-mono;
+                @apply flex items-center justify-between px-4 py-2 bg-background-dark border-b border-surface-dark text-xs text-gray-500 font-mono;
             }
 
             .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
@@ -143,8 +146,8 @@
             .prose blockquote p { @apply italic text-gray-200 mb-0; }
             .prose img { @apply rounded-xl my-8 border border-surface-dark; }
             .prose table { @apply w-full my-8 border-collapse; }
-            .prose th { @apply bg-surface-dark text-white font-semibold p-3 border border-[#44475a]; }
-            .prose td { @apply p-3 border border-[#44475a] text-gray-300; }
+            .prose th { @apply bg-surface-dark text-white font-semibold p-3 border border-border-dark; }
+            .prose td { @apply p-3 border border-border-dark text-gray-300; }
 
             .sticky-toc {
                 @apply bg-background-dark/95 backdrop-blur-md border border-surface-dark rounded-xl p-4 mb-8;
@@ -152,7 +155,7 @@
         }
 
         body {
-            background-color: #282a36;
+            background-color: #0a0a0c;
         }
 
         .no-scrollbar::-webkit-scrollbar {
@@ -173,7 +176,7 @@
 <body class="font-display antialiased text-gray-300">
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-[#282a36]/90 backdrop-blur-xl border-b border-surface-dark">
+    <nav class="sticky top-0 z-50 bg-background-dark/90 backdrop-blur-xl border-b border-surface-dark">
         <div class="flex items-center justify-between h-16 px-4 max-w-3xl mx-auto">
             <a href="/posts/" class="flex items-center text-primary hover:text-accent transition-colors">
                 <span class="material-symbols-outlined !text-[24px]">chevron_left</span>

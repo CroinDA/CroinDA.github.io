@@ -65,12 +65,14 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#3b82f6",
-                        "jekyll-orange": "#cc0000",
+                        "primary": "#00c9db",
+                        "primary-bright": "#00f2ff",
+                        "accent": "#7000ff",
                         "background-light": "#ffffff",
                         "background-dark": "#0a0a0c",
-                        "surface-dark": "#16161a",
-                        "border-dark": "#27272a",
+                        "card-dark": "#121214",
+                        "surface-dark": "#1a1a1c",
+                        "border-dark": "#2a2a2c",
                     },
                     fontFamily: {
                         "display": ["Inter", "sans-serif"],
@@ -117,16 +119,11 @@
 <header class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-xl border-b border-slate-200 dark:border-border-dark">
 <div class="flex items-center justify-between px-4 h-14">
 <a href="/" class="flex items-center gap-3">
-<div class="size-8 rounded bg-jekyll-orange flex items-center justify-center">
+<div class="size-8 rounded bg-accent flex items-center justify-center">
 <span class="material-symbols-outlined text-white text-xl">terminal</span>
 </div>
-<h1 class="font-bold text-lg tracking-tight dark:text-white">{{ site.title }}<span class="text-jekyll-orange">.</span>Feed</h1>
+<h1 class="font-bold text-lg tracking-tight dark:text-white">{{ site.title }}<span class="text-accent">.</span>Feed</h1>
 </a>
-<div class="flex items-center gap-2">
-<button id="mobile-menu-toggle" class="p-2 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined">menu</span>
-</button>
-</div>
 </div>
 <div class="px-4 pb-4">
 <div class="relative group">
@@ -252,7 +249,7 @@
 {% endif %}
 
 {% for post in posts %}
-{% assign category_colors = "jekyll-orange,blue-500,purple-500,emerald-500,orange-500,pink-500,indigo-500" | split: "," %}
+{% assign category_colors = "accent,blue-500,purple-500,emerald-500,orange-500,pink-500,indigo-500" | split: "," %}
 {% assign tag_colors = "blue-500,orange-500,slate-500,emerald-500,purple-500,yellow-500,pink-500,indigo-500,teal-500" | split: "," %}
 {% assign color_index = forloop.index0 | modulo: category_colors.size %}
 {% assign dot_color = category_colors[color_index] %}
@@ -342,25 +339,27 @@
     </div>
 </footer>
 
-<nav class="fixed bottom-0 left-0 right-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-2xl border-t border-slate-200 dark:border-border-dark px-8 pt-3 pb-8 z-[60]">
-<div class="flex justify-between items-center max-w-md mx-auto">
-<a href="/posts/" class="flex flex-col items-center gap-1 {% if page.url contains '/posts' %}text-primary{% else %}text-slate-400{% endif %}">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {% if page.url contains '/posts' %}1{% else %}0{% endif %};">dynamic_feed</span>
-<span class="text-[10px] font-mono font-medium uppercase">Feed</span>
+<!-- Floating Action Bar -->
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-card-dark/90 dark:bg-card-dark/90 backdrop-blur-2xl px-2 py-2 rounded-full shadow-2xl border border-surface-dark/50 ring-1 ring-white/5 z-50">
+<a href="/posts/" class="flex items-center gap-2 px-4 py-2 {% if page.url contains '/posts' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
+<span class="material-symbols-outlined !text-[20px]" style="font-variation-settings: 'FILL' {% if page.url contains '/posts' %}1{% else %}0{% endif %};">dynamic_feed</span>
+<span class="text-xs font-bold uppercase">Feed</span>
 </a>
-<a href="/categories/" class="flex flex-col items-center gap-1 {% if page.url contains '/categories' %}text-primary{% else %}text-slate-400{% endif %}">
-<span class="material-symbols-outlined">folder</span>
-<span class="text-[10px] font-mono font-medium uppercase">Category</span>
+<div class="w-px h-4 bg-surface-dark"></div>
+<a href="/categories/" class="flex items-center gap-2 px-4 py-2 {% if page.url contains '/categories' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
+<span class="material-symbols-outlined !text-[20px]">folder</span>
+<span class="text-xs font-bold uppercase">Category</span>
 </a>
-<a href="/tags/" class="flex flex-col items-center gap-1 {% if page.url contains '/tags' %}text-primary{% else %}text-slate-400{% endif %}">
-<span class="material-symbols-outlined">sell</span>
-<span class="text-[10px] font-mono font-medium uppercase">Tag</span>
+<div class="w-px h-4 bg-surface-dark"></div>
+<a href="/tags/" class="flex items-center gap-2 px-4 py-2 {% if page.url contains '/tags' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
+<span class="material-symbols-outlined !text-[20px]">sell</span>
+<span class="text-xs font-bold uppercase">Tag</span>
 </a>
-<a href="/" class="flex flex-col items-center gap-1 {% if page.url == '/' %}text-primary{% else %}text-slate-400{% endif %}">
-<span class="material-symbols-outlined">home</span>
-<span class="text-[10px] font-mono font-medium uppercase">Home</span>
+<div class="w-px h-4 bg-surface-dark"></div>
+<a href="/" class="flex items-center gap-2 px-4 py-2 {% if page.url == '/' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
+<span class="material-symbols-outlined !text-[20px]">home</span>
+<span class="text-xs font-bold uppercase">Home</span>
 </a>
-</div>
 </nav>
 
 <script>
