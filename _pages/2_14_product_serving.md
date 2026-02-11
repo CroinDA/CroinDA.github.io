@@ -1,6 +1,6 @@
 ---
 title: Product Serving
-layout: category
+layout: tech-feed-category
 permalink: /product_serving/
 taxonomy: product_serving
 sidebar:

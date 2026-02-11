@@ -1,6 +1,6 @@
 ---
 title: ML in Practice
-layout: category
+layout: tech-feed-category
 permalink: /ml_in_practice/
 taxonomy: ml_in_practice
 sidebar:

@@ -1,6 +1,6 @@
 ---
 title: ML for RecSys
-layout: category
+layout: tech-feed-category
 permalink: /ml_recsys/
 taxonomy: ml_recsys
 sidebar:

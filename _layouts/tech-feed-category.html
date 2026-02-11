@@ -122,7 +122,7 @@
 <div class="size-8 rounded bg-accent flex items-center justify-center">
 <span class="material-symbols-outlined text-white text-xl">terminal</span>
 </div>
-<h1 class="font-bold text-lg tracking-tight dark:text-white">{{ site.title }}<span class="text-accent">.</span>Feed</h1>
+<h1 class="font-bold text-lg tracking-tight dark:text-white">{{ site.title }}<span class="text-accent">.</span><span class="text-primary">{{ page.title }}</span></h1>
 </a>
 </div>
 <div class="px-4 pb-4">
@@ -147,14 +147,20 @@
                 _categories
             </h3>
 <div class="flex flex-nowrap overflow-x-auto gap-2 no-scrollbar pb-2">
-<a href="/posts/" class="px-3 py-1.5 {% if page.url == '/posts/' %}bg-primary/10 text-primary border-primary/20{% else %}bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 border-transparent{% endif %} rounded-full text-xs font-semibold border hover:border-primary/20 transition-colors whitespace-nowrap flex-shrink-0">
+<a href="/posts/" class="px-3 py-1.5 bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 border-transparent rounded-full text-xs font-semibold border hover:border-primary/20 transition-colors whitespace-nowrap flex-shrink-0">
                     All ({{ site.posts.size }})
                 </a>
 {% assign sorted_categories = site.categories | sort %}
 {% for category in sorted_categories %}
+{% if category[0] == page.taxonomy %}
+<a href="{{ page.url | relative_url }}" class="px-3 py-1.5 bg-primary/10 text-primary border-primary/20 rounded-full text-xs font-semibold border transition-colors whitespace-nowrap flex-shrink-0">
+                    {{ category[0] }} ({{ category[1].size }})
+                </a>
+{% else %}
 <a href="{{ site.baseurl }}/{{ category[0] }}/" class="px-3 py-1.5 bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 rounded-full text-xs border border-transparent hover:border-primary/20 transition-colors whitespace-nowrap flex-shrink-0">
                     {{ category[0] }} ({{ category[1].size }})
                 </a>
+{% endif %}
 {% endfor %}
 </div>
 </div>
@@ -230,7 +236,7 @@
 <ul class="space-y-1 text-xs">
 {% for child in section.children %}
 <li>
-<a href="{{ child.url | relative_url }}" class="block px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-surface-dark hover:text-primary transition-colors">
+<a href="{{ child.url | relative_url }}" class="block px-2 py-1 rounded {% if child.url == page.url %}bg-primary/10 text-primary font-semibold{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-surface-dark hover:text-primary{% endif %} transition-colors">
 {{ child.title }}
 </a>
 </li>
@@ -244,12 +250,9 @@
 
 <!-- Posts Section -->
 <div class="divide-y divide-slate-200 dark:divide-border-dark">
-{% if paginator %}
-  {% assign posts = paginator.posts %}
-{% else %}
-  {% assign posts = site.posts %}
-{% endif %}
+{% assign posts = site.categories[page.taxonomy] %}
 
+{% if posts.size > 0 %}
 {% for post in posts %}
 {% assign category_colors = "accent,blue-500,purple-500,emerald-500,orange-500,pink-500,indigo-500" | split: "," %}
 {% assign tag_colors = "blue-500,orange-500,slate-500,emerald-500,purple-500,yellow-500,pink-500,indigo-500,teal-500" | split: "," %}
@@ -298,45 +301,17 @@
 </a>
 </article>
 {% endfor %}
+{% else %}
+<div class="p-12 text-center">
+<span class="material-symbols-outlined text-4xl text-slate-400 dark:text-slate-600 mb-3 block">draft</span>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-mono">No posts yet in this category.</p>
+</div>
+{% endif %}
 </div>
 </div>
 </main>
 
 <footer class="p-8 pb-32 flex flex-col items-center gap-4 text-center">
-{% if paginator %}
-<div class="flex gap-2 font-mono">
-{% if paginator.previous_page %}
-<a href="{{ paginator.previous_page_path | relative_url }}" class="size-10 flex items-center justify-center border border-slate-200 dark:border-border-dark rounded text-slate-700 dark:text-slate-300 hover:border-primary transition-colors">
-<span class="material-symbols-outlined">chevron_left</span>
-</a>
-{% else %}
-<button class="size-10 flex items-center justify-center border border-slate-200 dark:border-border-dark rounded text-slate-400" disabled>
-<span class="material-symbols-outlined">chevron_left</span>
-</button>
-{% endif %}
-
-{% for page_num in (1..paginator.total_pages) %}
-  {% if page_num == paginator.page %}
-    <span class="size-10 flex items-center justify-center bg-primary text-white rounded font-bold shadow-lg shadow-primary/20">{{ page_num }}</span>
-  {% elsif page_num == 1 %}
-    <a href="{{ '/posts/' | relative_url }}" class="size-10 flex items-center justify-center border border-slate-200 dark:border-border-dark rounded dark:text-white hover:border-primary transition-colors">{{ page_num }}</a>
-  {% else %}
-    <a href="{{ site.paginate_path | relative_url | replace: ':num', page_num }}" class="size-10 flex items-center justify-center border border-slate-200 dark:border-border-dark rounded dark:text-white hover:border-primary transition-colors">{{ page_num }}</a>
-  {% endif %}
-{% endfor %}
-
-{% if paginator.next_page %}
-<a href="{{ paginator.next_page_path | relative_url }}" class="size-10 flex items-center justify-center border border-slate-200 dark:border-border-dark rounded dark:text-white hover:border-primary transition-colors">
-<span class="material-symbols-outlined">chevron_right</span>
-</a>
-{% else %}
-<button class="size-10 flex items-center justify-center border border-slate-200 dark:border-border-dark rounded text-slate-400" disabled>
-<span class="material-symbols-outlined">chevron_right</span>
-</button>
-{% endif %}
-</div>
-{% endif %}
-
 <div class="font-mono text-[10px] text-slate-400 uppercase tracking-widest">
         GENERATED BY JEKYLL {% if jekyll.version %}{{ jekyll.version }}{% else %}V4.3.3{% endif %}
     </div>
@@ -344,13 +319,13 @@
 
 <!-- Floating Action Bar -->
 <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-card-dark/90 dark:bg-card-dark/90 backdrop-blur-2xl px-2 py-2 rounded-full shadow-2xl border border-surface-dark/50 ring-1 ring-white/5 z-50">
-<a href="/" class="flex items-center gap-2 px-4 py-2 {% if page.url == '/' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
+<a href="/" class="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-primary transition-colors">
 <span class="material-symbols-outlined !text-[20px]">home</span>
 <span class="text-xs font-bold uppercase">Home</span>
 </a>
 <div class="w-px h-4 bg-surface-dark"></div>
-<a href="/posts/" class="flex items-center gap-2 px-4 py-2 {% if page.url contains '/posts' %}text-primary{% else %}text-gray-300 hover:text-primary{% endif %} transition-colors">
-<span class="material-symbols-outlined !text-[20px]" style="font-variation-settings: 'FILL' {% if page.url contains '/posts' %}1{% else %}0{% endif %};">dynamic_feed</span>
+<a href="/posts/" class="flex items-center gap-2 px-4 py-2 text-primary transition-colors">
+<span class="material-symbols-outlined !text-[20px]" style="font-variation-settings: 'FILL' 1;">dynamic_feed</span>
 <span class="text-xs font-bold uppercase">Feed</span>
 </a>
 </nav>

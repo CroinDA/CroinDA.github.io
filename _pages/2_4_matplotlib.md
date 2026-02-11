@@ -1,6 +1,6 @@
 ---
 title: EDA & DataViz
-layout: category
+layout: tech-feed-category
 permalink: /matplotlib/
 taxonomy: matplotlib
 sidebar:

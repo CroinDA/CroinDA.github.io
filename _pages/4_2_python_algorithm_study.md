@@ -1,6 +1,6 @@
 ---
 title: 알고리즘 스터디(Python)
-layout: category
+layout: tech-feed-category
 permalink: /python_algorithm_study/
 taxonomy: python_algorithm_study
 sidebar:

@@ -1,6 +1,6 @@
 ---
 title: Baseline 정복
-layout: category
+layout: tech-feed-category
 permalink: /hackathon_baseline/
 taxonomy: hackathon_baseline
 sidebar:

@@ -1,6 +1,6 @@
 ---
 title: RecSys Basic
-layout: category
+layout: tech-feed-category
 permalink: /recsys_basic/
 taxonomy: recsys_basic
 sidebar:

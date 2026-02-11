@@ -1,6 +1,6 @@
 ---
 title: ML Projects
-layout: category
+layout: tech-feed-category
 permalink: /ml_projects/
 taxonomy: ml_projects
 sidebar:

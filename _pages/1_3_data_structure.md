@@ -1,6 +1,6 @@
 ---
 title: 자료구조
-layout: category
+layout: tech-feed-category
 permalink: /data_structure/
 taxonomy: data_structure
 # sort_order: "ascending"

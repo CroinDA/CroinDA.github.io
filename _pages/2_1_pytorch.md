@@ -1,6 +1,6 @@
 ---
 title: PyTorch
-layout: category
+layout: tech-feed-category
 permalink: /pytorch/
 taxonomy: pytorch
 sidebar:

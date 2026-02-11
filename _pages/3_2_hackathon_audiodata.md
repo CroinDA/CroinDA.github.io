@@ -1,6 +1,6 @@
 ---
 title: 오디오 데이터 및 전처리
-layout: category
+layout: tech-feed-category
 permalink: /hackathon_audiodata/
 taxonomy: hackathon_audiodata
 sidebar:

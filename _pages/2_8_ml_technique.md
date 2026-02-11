@@ -1,6 +1,6 @@
 ---
 title: ML Technique
-layout: category
+layout: tech-feed-category
 permalink: /ml_technique/
 taxonomy: ml_technique
 sidebar:

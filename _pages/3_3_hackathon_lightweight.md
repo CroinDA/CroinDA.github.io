@@ -1,6 +1,6 @@
 ---
 title: 오디오 언어모델 경량화
-layout: category
+layout: tech-feed-category
 permalink: /hackathon_lightweight/
 taxonomy: hackathon_lightweight
 sidebar:

@@ -1,6 +1,6 @@
 ---
 title: NLP Basic
-layout: category
+layout: tech-feed-category
 permalink: /nlp_basic/
 taxonomy: nlp_basic
 sidebar:

@@ -1,6 +1,6 @@
 ---
 title: 네트워크
-layout: category
+layout: tech-feed-category
 permalink: /network/
 taxonomy: network
 # sort_order: "ascending"

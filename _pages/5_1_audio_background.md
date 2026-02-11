@@ -1,6 +1,6 @@
 ---
 title: 배경지식
-layout: category
+layout: tech-feed-category
 permalink: /audio_background/
 taxonomy: audio_background
 sidebar:

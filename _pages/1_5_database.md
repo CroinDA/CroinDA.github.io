@@ -1,6 +1,6 @@
 ---
 title: 데이터베이스
-layout: category
+layout: tech-feed-category
 permalink: /database/
 taxonomy: database
 # sort_order: "ascending"

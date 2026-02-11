@@ -1,6 +1,6 @@
 ---
 title: RecSys Projects
-layout: category
+layout: tech-feed-category
 permalink: /recsys_projects/
 taxonomy: recsys_projects
 sidebar:

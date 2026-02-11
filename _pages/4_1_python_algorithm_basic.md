@@ -1,6 +1,6 @@
 ---
 title: 알고리즘 기초(Python)
-layout: category
+layout: tech-feed-category
 permalink: /python_algorithm_basic/
 taxonomy: python_algorithm_basic
 sidebar:

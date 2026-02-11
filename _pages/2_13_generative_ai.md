@@ -1,6 +1,6 @@
 ---
 title: Generative AI
-layout: category
+layout: tech-feed-category
 permalink: /generative_ai/
 taxonomy: generative_ai
 sidebar:
