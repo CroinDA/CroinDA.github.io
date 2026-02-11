@@ -396,3 +396,25 @@ breadcrumb_titles:
   "알고리즘 정복기": "알고리즘 정복기"
   python_algorithm_basic: "알고리즘 기초(Python)"
   python_algorithm: "알고리즘 스터디(Python)"
+
+  # PRML
+  "PRML": "PRML"
+  prml_major: "패턴인식과 머신러닝"
+  prml_major_chapter1: "Chapter 1. 소개"
+  prml_major_chapter2: "Chapter 2. 확률 분포"
+  prml_major_chapter3: "Chapter 3. 선형 회귀 모델"
+  prml_major_chapter4: "Chapter 4. 선형 분류 모델"
+  prml_major_chapter5: "Chapter 5. 뉴럴 네트워크"
+  prml_major_chapter8: "Chapter 8. 그래프 모델"
+  prml_major_chapter9: "Chapter 9. 혼합 모델과 EM"
+  prml_major_chapter12: "Chapter 12. 연속 잠재변수"
+
+  # 2026-SQLD
+  "2026-SQLD": "2026-SQLD"
+  sqld_data_modeling: "데이터 모델링의 이해"
+  sqld_sql_basic: "SQL 기본"
+  sqld_sql_utilization: "SQL 활용"
+  sqld_sql_admin: "SQL 관리구문"
+
+  # 도와주세요
+  help_me: "도와주세요"

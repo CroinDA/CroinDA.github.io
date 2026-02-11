@@ -10,6 +10,24 @@ main:
 docs:
   # - title: "안녕하세요! Welcome to PM_AI_LAB🙋"
   #   url: /first/
+  - title: "PRML"
+    children:
+      - title: "Chapter 1. 소개"
+        url: /prml_major_chapter1/
+      # - title: "Chapter 2. 확률 분포"
+      #   url: /prml_major_chapter2/
+      # - title: "Chapter 3. 선형 회귀 모델"
+      #   url: /prml_major_chapter3/
+      # - title: "Chapter 4. 선형 분류 모델"
+      #   url: /prml_major_chapter4/
+      # - title: "Chapter 5. 뉴럴 네트워크"
+      #   url: /prml_major_chapter5/
+      # - title: "Chapter 8. 그래프 모델"
+      #   url: /prml_major_chapter8/
+      # - title: "Chapter 9. 혼합 모델과 EM"
+      #   url: /prml_major_chapter9/     
+      # - title: "Chapter 12. 연속 잠재변수"
+      #   url: /prml_major_chapter12/
   - title: "CS Basic"
     children:
       - title: "컴퓨터 구조"
@@ -86,10 +104,20 @@ docs:
         url: /adsp_R_datamart_stats/
       - title: "정형 데이터 마이닝"
         url: /adsp_data_mining/
-  # - title: "도와주세요"
-  #   children:
-  #     - title: "도와주세요"
-  #       url: /help_me/
+  - title: "2026-SQLD"
+    children:
+      - title: "데이터 모델링의 이해"
+        url: /sqld_data_modeling/
+      - title: "SQL 기본"
+        url: /sqld_sql_basic/
+      - title: "SQL 활용"
+        url: /sqld_sql_utilization/
+      - title: "SQL 관리구문"
+        url: /sqld_sql_admin/
+  - title: "도와주세요"
+    children:
+      - title: "도와주세요"
+        url: /help_me/
 
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
